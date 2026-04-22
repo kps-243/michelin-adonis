@@ -6,6 +6,7 @@ export default class extends BaseSchema {
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
+      table.increments('name').notNullable()
       table.enum('michelin_star', ['ONE', 'TWO', 'THREE'], {
         useNative: true,
         enumName: 'michelin_star_enum',
