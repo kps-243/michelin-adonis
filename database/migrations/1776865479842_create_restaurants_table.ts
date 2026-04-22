@@ -4,9 +4,10 @@ export default class extends BaseSchema {
   protected tableName = 'restaurants'
 
   async up() {
+    await this.schema.raw('DROP TYPE IF EXISTS michelin_star_enum')
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
-      table.increments('name').notNullable()
+      table.string('name', 255).notNullable()
       table.enum('michelin_star', ['ONE', 'TWO', 'THREE'], {
         useNative: true,
         enumName: 'michelin_star_enum',

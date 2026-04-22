@@ -1,10 +1,9 @@
-import { BaseModel, column, beforeCreate } from '@adonisjs/lucid/orm'
+import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
-import { randomUUID } from 'node:crypto'
 
 export default class Restaurant extends BaseModel {
   @column({ isPrimary: true })
-  declare id: string
+  declare id: number
 
   @column()
   declare name: string
@@ -44,9 +43,4 @@ export default class Restaurant extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
-
-  @beforeCreate()
-  static assignUuid(restaurant: Restaurant) {
-    restaurant.id = randomUUID()
-  }
 }
