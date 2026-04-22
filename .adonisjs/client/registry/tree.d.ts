@@ -14,4 +14,13 @@ export interface ApiDefinition {
   home: typeof routes['home']
   swipe: typeof routes['Swipe']
   pourToi: typeof routes['PourToi']
+  restaurants: {
+    index: typeof routes['restaurants.index']
+    create: typeof routes['restaurants.create']
+    store: typeof routes['restaurants.store']
+    show: typeof routes['restaurants.show']
+    edit: typeof routes['restaurants.edit']
+    update: typeof routes['restaurants.update']
+    destroy: typeof routes['restaurants.destroy']
+  }
 }

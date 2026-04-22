@@ -9,4 +9,5 @@ export const controllers = {
   PourToi: () => import('#controllers/pour_toi_controller'),
   Session: () => import('#controllers/session_controller'),
   Swipe: () => import('#controllers/swipe_controller'),
+  Restaurants: () => import('#controllers/restaurants_controller'),
 }

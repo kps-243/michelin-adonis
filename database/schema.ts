@@ -7,92 +7,37 @@
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
-export class HoursOfOperationSchema extends BaseModel {
-  static $columns = ['closed', 'closes', 'createdAt', 'day', 'id', 'opens', 'restaurantId', 'updatedAt'] as const
-  $columns = HoursOfOperationSchema.$columns
-  @column()
-  declare closed: boolean
-  @column()
-  declare closes: string | null
-  @column.dateTime({ autoCreate: true })
-  declare createdAt: DateTime
-  @column()
-  declare day: number
-  @column({ isPrimary: true })
-  declare id: number
-  @column()
-  declare opens: string | null
-  @column()
-  declare restaurantId: number | null
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
-  declare updatedAt: DateTime
-}
-
-export class ImageSchema extends BaseModel {
-  static $columns = ['copyright', 'createdAt', 'id', 'restaurantId', 'topic', 'updatedAt', 'url'] as const
-  $columns = ImageSchema.$columns
-  @column()
-  declare copyright: string | null
-  @column.dateTime({ autoCreate: true })
-  declare createdAt: DateTime
-  @column({ isPrimary: true })
-  declare id: number
-  @column()
-  declare restaurantId: number | null
-  @column()
-  declare topic: string | null
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
-  declare updatedAt: DateTime
-  @column()
-  declare url: string
-}
-
 export class RestaurantSchema extends BaseModel {
-  static $columns = ['city', 'codePostal', 'country', 'createdAt', 'cuisine', 'id', 'lat', 'lng', 'maxPrice', 'michelinStar', 'postcode', 'street', 'updatedAt'] as const
+  static $columns = ['city', 'codePostal', 'country', 'createdAt', 'cuisine', 'id', 'lat', 'lng', 'maxPrice', 'michelinStar', 'name', 'postcode', 'street', 'updatedAt'] as const
   $columns = RestaurantSchema.$columns
   @column()
-  declare city: string | null
+  declare city: string
   @column()
-  declare codePostal: number | null
+  declare codePostal: number
   @column()
-  declare country: string | null
+  declare country: string
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
   @column()
-  declare cuisine: string | null
+  declare cuisine: string
   @column({ isPrimary: true })
-  declare id: number
+  declare id: string
   @column()
-  declare lat: string | null
+  declare lat: number
   @column()
-  declare lng: string | null
+  declare lng: number
   @column()
-  declare maxPrice: string | null
+  declare maxPrice: number
   @column()
-  declare michelinStar: any | null
+  declare michelinStar: string | null
   @column()
-  declare postcode: string | null
+  declare name: string
   @column()
-  declare street: string | null
+  declare postcode: string
+  @column()
+  declare street: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  declare updatedAt: DateTime
-}
-
-export class SwipedRestaurantSchema extends BaseModel {
-  static $columns = ['createdAt', 'id', 'matched', 'restaurantId', 'updatedAt', 'userId'] as const
-  $columns = SwipedRestaurantSchema.$columns
-  @column.dateTime({ autoCreate: true })
-  declare createdAt: DateTime
-  @column({ isPrimary: true })
-  declare id: number
-  @column()
-  declare matched: boolean
-  @column()
-  declare restaurantId: number | null
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
-  declare updatedAt: DateTime
-  @column()
-  declare userId: number | null
+  declare updatedAt: DateTime | null
 }
 
 export class UserSchema extends BaseModel {
