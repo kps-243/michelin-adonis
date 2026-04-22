@@ -3,7 +3,7 @@ import { Link } from '@inertiajs/react'
 import BottomNav from '../../components/BottomNav'
 
 interface Restaurant {
-  id: string
+  id: number
   name: string
   michelinStar: 'THREE' | 'TWO' | 'ONE' | null
   street: string

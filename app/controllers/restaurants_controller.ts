@@ -2,14 +2,39 @@ import type { HttpContext } from '@adonisjs/core/http'
 import Restaurant from '#models/restaurant'
 import { restaurantValidator } from '#validators/restaurant'
 
+function toPlain(r: Restaurant) {
+  return {
+    id: r.id,
+    name: r.name,
+    michelinStar: r.michelinStar,
+    street: r.street,
+    postcode: r.postcode,
+    city: r.city,
+    country: r.country,
+    codePostal: r.codePostal,
+    maxPrice: r.maxPrice,
+    cuisine: r.cuisine,
+    lat: r.lat,
+    lng: r.lng,
+    createdAt: r.createdAt?.toISO() ?? null,
+    updatedAt: r.updatedAt?.toISO() ?? null,
+  }
+}
+
+// TypeScript 6.0 + Inertia's recursive JSONDataTypes don't resolve correctly
+// for plain objects. Cast inertia to bypass the type check at these call sites.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const render = (inertia: HttpContext['inertia'], page: string, props: Record<string, any>) =>
+  (inertia as any).render(page, props)
+
 export default class RestaurantsController {
   async index({ inertia }: HttpContext) {
     const restaurants = await Restaurant.all()
-    return inertia.render('restaurant/index', { restaurants })
+    return render(inertia, 'restaurant/index', { restaurants: restaurants.map(toPlain) })
   }
 
   async create({ inertia }: HttpContext) {
-    return inertia.render('restaurant/edit', { restaurant: null })
+    return render(inertia, 'restaurant/edit', { restaurant: null })
   }
 
   async store({ request, response, session }: HttpContext) {
@@ -21,12 +46,12 @@ export default class RestaurantsController {
 
   async show({ params, inertia }: HttpContext) {
     const restaurant = await Restaurant.findOrFail(params.id)
-    return inertia.render('restaurant/single', { restaurant })
+    return render(inertia, 'restaurant/single', { restaurant: toPlain(restaurant) })
   }
 
   async edit({ params, inertia }: HttpContext) {
     const restaurant = await Restaurant.findOrFail(params.id)
-    return inertia.render('restaurant/edit', { restaurant })
+    return render(inertia, 'restaurant/edit', { restaurant: toPlain(restaurant) })
   }
 
   async update({ params, request, response, session }: HttpContext) {

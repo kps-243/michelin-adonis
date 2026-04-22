@@ -2,7 +2,7 @@ import { Link, router } from '@inertiajs/react'
 import BottomNav from '../../components/BottomNav'
 
 interface Restaurant {
-  id: string
+  id: number
   name: string
   michelinStar: 'THREE' | 'TWO' | 'ONE' | null
   city: string
@@ -23,7 +23,7 @@ function starBadge(star: Restaurant['michelinStar']) {
 }
 
 export default function RestaurantIndex({ restaurants }: Props) {
-  const handleDelete = (id: string, name: string) => {
+  const handleDelete = (id: number, name: string) => {
     if (confirm(`Supprimer "${name}" ?`)) {
       router.delete(`/restaurants/${id}`)
     }
