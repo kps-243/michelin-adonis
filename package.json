@@ -14,7 +14,9 @@
     "test": "node ace test",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "typecheck": "tsc --noEmit && tsc --noEmit --project inertia/tsconfig.json"
+    "typecheck": "tsc --noEmit && tsc --noEmit --project inertia/tsconfig.json",
+    "migrate": "node ace migration:fresh && node ace db:seed --files database/seeders/main_seeder.ts",
+    "docker": "npm run migrate && node ace serve --hmr"
   },
   "imports": {
     "#controllers/*": "./app/controllers/*.js",
@@ -77,6 +79,7 @@
     "csv-parse": "^5.6.0",
     "edge.js": "^6.5.0",
     "luxon": "^3.7.2",
+    "pg": "^8.20.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "reflect-metadata": "^0.2.2",
