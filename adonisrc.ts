@@ -123,6 +123,10 @@ export default defineConfig({
       pattern: 'public/**',
       reloadServer: false,
     },
+    {
+      pattern: 'data/**/*',
+      reloadServer: false,
+    },
   ],
 
   hooks: {
