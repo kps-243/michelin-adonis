@@ -109,6 +109,7 @@
   --font-cormorant: 'Cormorant Garamond', Georgia, serif;
   --font-dm: 'DM Sans', system-ui, sans-serif;
   --color-red-primary: #AB152E;
+  --color-red-secondary: #94192B;
 }
 
 /* ── Variables globales (hors layer pour être disponibles partout) ── */

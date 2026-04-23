@@ -4,6 +4,8 @@ import RestaurantCard from '../components/RestaurantCard'
 import type { Restaurant } from '../../app/services/restaurant_service'
 import PrimaryTitle from '~/components/PrimaryTitle'
 import SecondaryTitle from '~/components/SecondaryTitle'
+import { router } from '@inertiajs/react'
+import SearchBar from '../components/SearchBar'
 
 interface Props {
   featured: {
@@ -93,15 +95,11 @@ export default function Home({ featured, stats }: Props) {
       </section>
 
       {/* ── SEARCH ── */}
-      <div className="px-5 py-4 bg-white border-b border-gray-100">
-        <div className="flex items-center gap-2.5 bg-[#FAF8F4] border-[1.5px] border-gray-200 rounded-full px-4 py-2.5">
-          <span className="text-gray-400">🔍</span>
-          <input
-            type="text"
-            placeholder="Cuisine, ville, restaurant..."
-            className="flex-1 border-none bg-transparent font-dm text-sm text-[#1A1A1A] outline-none placeholder:text-gray-400"
-          />
-        </div>
+      <div className="px-4 mt-4">
+        <SearchBar
+          placeholder="Destination ou nom de l'hôtel ..."
+          onSearch={(q) => console.log('Recherche:', q)}
+        />
       </div>
 
       {/* ── FILTERS ── */}
