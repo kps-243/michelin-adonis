@@ -4,6 +4,7 @@
  */
 
 export const controllers = {
+  AdminRestaurants: () => import('#controllers/admin_restaurants_controller'),
   Home: () => import('#controllers/home_controller'),
   NewAccount: () => import('#controllers/new_account_controller'),
   PourToi: () => import('#controllers/pour_toi_controller'),
@@ -11,5 +12,4 @@ export const controllers = {
   Restaurants: () => import('#controllers/restaurants_controller'),
   Session: () => import('#controllers/session_controller'),
   Swipe: () => import('#controllers/swipe_controller'),
-  AdminRestaurants: () => import('#controllers/admin_restaurants_controller'),
 }

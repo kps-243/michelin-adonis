@@ -258,6 +258,23 @@
     max-width: 400px;
     margin: auto;
   }
+  .auth-page {
+    min-height: calc(100dvh - 56px - 68px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .auth-card {
+    width: 100%;
+    background: #fff;
+    border: 1px solid var(--gray-3);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  }
+  .auth-card-wide {
+    max-width: 520px;
+  }
   .form-container h1 {
     font-size: 32px;
     letter-spacing: -0.5px;
@@ -316,6 +333,18 @@
   }
   .form-container button[type='submit']:hover {
     background: var(--gray-10);
+  }
+  .auth-switch {
+    margin: 0;
+    font-size: 14px;
+    color: var(--gray-7);
+    text-align: center;
+  }
+  .auth-switch-link {
+    color: var(--gray-12);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
   }
 
   /* Alerts */
