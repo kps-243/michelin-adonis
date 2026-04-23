@@ -1,4 +1,4 @@
-import { Link } from '@inertiajs/react'
+import { Link, usePage } from '@inertiajs/react'
 
 import PlatIcon from '../ressources/images/icons/plat-icon.svg'
 import PlatOutlineIcon from '../ressources/images/icons/plat-outline-icon.svg'
@@ -9,11 +9,9 @@ import BedOutlineIcon from '../ressources/images/icons/bed-outline-icon.svg'
 import ProfileIcon from '../ressources/images/icons/profile-icon.svg'
 import ProfileOutlineIcon from '../ressources/images/icons/profile-outline-icon.svg'
 
-interface NavBarProps {
-  active: 'home' | 'restaurants' | 'sejours' | 'pour-toi' | 'profile'
-}
+export default function NavBar() {
+  const { url } = usePage()
 
-export default function NavBar({ active }: NavBarProps) {
   const navItems = [
     {
       id: 'home',
@@ -55,7 +53,7 @@ export default function NavBar({ active }: NavBarProps) {
   return (
     <nav className="fixed bottom-0 left-0 right-0 h-17 bg-(--navbar-bg) flex items-center justify-around px-4 z-50">
       {navItems.map((item) => {
-        const isActive = active === item.id
+        const isActive = url === item.href || (item.href !== '/' && url.startsWith(item.href))
         return (
           <Link
             key={item.id}

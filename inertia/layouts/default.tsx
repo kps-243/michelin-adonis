@@ -3,6 +3,7 @@ import { toast, Toaster } from 'sonner'
 import { usePage } from '@inertiajs/react'
 import { ReactElement, useEffect } from 'react'
 import Header from '../components/Header'
+import NavBar from '~/components/NavBar'
 
 export default function Layout({ children }: { children: ReactElement<Data.SharedProps> }) {
   useEffect(() => {
@@ -23,6 +24,7 @@ export default function Layout({ children }: { children: ReactElement<Data.Share
       <Header />
       <main>{children}</main>
       <Toaster position="top-center" richColors />
+      <NavBar />
     </>
   )
 }

@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { Link } from '@inertiajs/react'
-import BottomNav from '../components/NavBar'
 import RestaurantCard from '../components/RestaurantCard'
 import type { Restaurant } from '../../app/services/restaurant_service'
 import PrimaryTitle from '~/components/PrimaryTitle'
@@ -197,8 +196,6 @@ export default function Home({ featured, stats }: Props) {
           </div>
         ))}
       </div>
-
-      <BottomNav active="home" />
     </div>
   )
 }

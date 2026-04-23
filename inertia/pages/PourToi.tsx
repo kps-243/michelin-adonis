@@ -303,8 +303,6 @@ export default function PourToi({ socialImages, featured, spotlight }: Props) {
           </Link>
         </div>
       </div>
-
-      <BottomNav active="pour-toi" dark />
     </div>
   )
 }
