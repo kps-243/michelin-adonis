@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { Link } from '@inertiajs/react'
-import BottomNav from '../components/NavBar'
 import type { Restaurant } from '../../app/services/restaurant_service'
 
 interface SocialImage {
@@ -62,7 +61,7 @@ function GridItem({ item, size, saved, onSave }: { item: SocialImage; size: Grid
   return (
     <div className={`relative overflow-hidden rounded-xl cursor-pointer ${sizeClass[size]} ${heightClass[size]}`}>
       <img src={item.src} alt={item.tag} className="w-full h-full object-cover" loading="lazy" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+      <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/10 to-transparent" />
       {item.badge && (
         <div className="absolute top-2 left-2 bg-[#E4002B] text-white text-[9px] font-barlow font-bold tracking-widest uppercase px-2 py-0.5 rounded-sm">
           {item.badge}
@@ -99,11 +98,11 @@ export default function PourToi({ socialImages, featured, spotlight }: Props) {
     <div className="min-h-screen bg-[#0A0A0A] text-[#F0EBE0] font-dm pb-20 overflow-x-hidden">
 
       {/* ── HEADER ── */}
-      <header className="sticky top-0 z-40 bg-[rgba(10,10,10,0.92)] backdrop-blur-xl border-b border-white/[0.06] px-5 py-3 flex items-center justify-between">
+      <header className="sticky top-0 z-40 bg-[rgba(10,10,10,0.92)] backdrop-blur-xl border-b border-white/6 px-5 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <Link
             href="/"
-            className="w-9 h-9 bg-white/[0.05] rounded-full flex items-center justify-center text-base text-[#F0EBE0] no-underline"
+            className="w-9 h-9 bg-white/5 rounded-full flex items-center justify-center text-base text-[#F0EBE0] no-underline"
           >
             ←
           </Link>
@@ -112,19 +111,19 @@ export default function PourToi({ socialImages, featured, spotlight }: Props) {
           </div>
         </div>
         <div className="flex gap-2.5">
-          <button className="w-9 h-9 bg-white/[0.05] rounded-full flex items-center justify-center text-base">🔍</button>
-          <button className="w-9 h-9 bg-white/[0.05] rounded-full flex items-center justify-center text-base">♡</button>
+          <button className="w-9 h-9 bg-white/5 rounded-full flex items-center justify-center text-base">🔍</button>
+          <button className="w-9 h-9 bg-white/5 rounded-full flex items-center justify-center text-base">♡</button>
         </div>
       </header>
 
       {/* ── EDITORIAL HERO ── */}
-      <div className="relative h-[55vw] min-h-[220px] max-h-[360px] overflow-hidden">
+      <div className="relative h-[55vw] min-h-55 max-h-90 overflow-hidden">
         <img
           src="https://images.unsplash.com/photo-1551218808-94e220e084d2?w=900&q=85"
           alt="Hero"
           className="w-full h-full object-cover brightness-[0.6]"
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-[#0A0A0A]/70" />
+        <div className="absolute inset-0 bg-linear-to-br from-transparent via-transparent to-[#0A0A0A]/70" />
         <div className="absolute top-5 left-5 bg-[#E4002B] text-white font-barlow text-[11px] font-bold tracking-[0.2em] uppercase px-3 py-1 rounded-sm">
           ✦ TENDANCE
         </div>
@@ -138,7 +137,7 @@ export default function PourToi({ socialImages, featured, spotlight }: Props) {
       </div>
 
       {/* ── TAGS STRIP ── */}
-      <div className="flex gap-2 px-5 py-3.5 overflow-x-auto scrollbar-none border-b border-white/[0.05]">
+      <div className="flex gap-2 px-5 py-3.5 overflow-x-auto scrollbar-none border-b border-white/5">
         {tags.map((t) => (
           <button
             key={t}
@@ -146,7 +145,7 @@ export default function PourToi({ socialImages, featured, spotlight }: Props) {
             className={`whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-medium transition-all tracking-tight border ${
               activeTag === t
                 ? 'bg-[#E4002B] border-[#E4002B] text-white'
-                : 'bg-white/[0.04] border-white/[0.12] text-white/70 hover:border-white/30 hover:text-white'
+                : 'bg-white/4 border-white/12 text-white/70 hover:border-white/30 hover:text-white'
             }`}
           >
             {t}
@@ -155,11 +154,11 @@ export default function PourToi({ socialImages, featured, spotlight }: Props) {
       </div>
 
       {/* ── CREATOR BANNER ── */}
-      <div className="mx-5 mt-5 bg-[#141414] rounded-2xl flex items-center gap-3.5 p-4 border border-white/[0.06]">
+      <div className="mx-5 mt-5 bg-[#141414] rounded-2xl flex items-center gap-3.5 p-4 border border-white/6">
         <img
           src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=100&q=80"
           alt="Chef"
-          className="w-[52px] h-[52px] rounded-full object-cover border-2 border-[#E4002B] flex-shrink-0"
+          className="w-13 h-13 rounded-full object-cover border-2 border-[#E4002B] shrink-0"
         />
         <div className="flex-1">
           <div className="font-semibold text-sm mb-0.5">Chef Adrien Moles</div>
@@ -188,7 +187,7 @@ export default function PourToi({ socialImages, featured, spotlight }: Props) {
       </div>
 
       {/* ── FULL BANNER ── */}
-      <div className="mx-3 mt-4 rounded-2xl overflow-hidden relative h-[42vw] min-h-[160px]">
+      <div className="mx-3 mt-4 rounded-2xl overflow-hidden relative h-[42vw] min-h-40">
         <img
           src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=900&q=85"
           alt="Fine dining"
@@ -215,9 +214,9 @@ export default function PourToi({ socialImages, featured, spotlight }: Props) {
       </div>
       <div className="flex gap-2.5 px-5 overflow-x-auto scrollbar-none">
         {reels.map((reel, i) => (
-          <div key={i} className="relative flex-shrink-0 w-[100px] h-[170px] rounded-xl overflow-hidden cursor-pointer">
+          <div key={i} className="relative shrink-0 w-25 h-42.5 rounded-xl overflow-hidden cursor-pointer">
             <img src={reel.src} alt={reel.label} className="w-full h-full object-cover" loading="lazy" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+            <div className="absolute inset-0 bg-linear-to-t from-black/70 to-transparent" />
             <div className="absolute inset-0 flex items-center justify-center text-white/90 text-xl">▶</div>
             <div className="absolute bottom-2 left-2 right-2 text-[10px] text-white/90 font-medium leading-tight">
               {reel.label}
@@ -238,12 +237,12 @@ export default function PourToi({ socialImages, featured, spotlight }: Props) {
             href={r.michelinUrl}
             target="_blank"
             rel="noreferrer"
-            className="flex-shrink-0 w-[140px] bg-[#141414] rounded-2xl overflow-hidden no-underline text-[#F0EBE0]"
+            className="shrink-0 w-35 bg-[#141414] rounded-2xl overflow-hidden no-underline text-[#F0EBE0]"
           >
             <img
               src={spotlightImgs[i % spotlightImgs.length]}
               alt={r.name}
-              className="w-full h-[100px] object-cover"
+              className="w-full h-25 object-cover"
               loading="lazy"
             />
             <div className="p-2.5">
@@ -258,18 +257,18 @@ export default function PourToi({ socialImages, featured, spotlight }: Props) {
       </div>
 
       {/* ── TRENDING RANKING ── */}
-      <div className="mx-5 mt-6 bg-[#141414] rounded-2xl overflow-hidden border border-white/[0.05]">
-        <div className="px-4 py-4 border-b border-white/[0.05]">
+      <div className="mx-5 mt-6 bg-[#141414] rounded-2xl overflow-hidden border border-white/5">
+        <div className="px-4 py-4 border-b border-white/5">
           <div className="font-barlow text-lg font-black uppercase tracking-wide">Top Tables du Moment</div>
         </div>
-        <div className="divide-y divide-white/[0.05]">
+        <div className="divide-y divide-white/5">
           {featured.slice(0, 5).map((r, i) => (
             <div key={r.id} className="flex items-center gap-3 px-4 py-3">
               <div className="font-bebas text-2xl text-[#E4002B] w-6 text-center">{i + 1}</div>
               <img
                 src={trendImgs[i]}
                 alt={r.name}
-                className="w-11 h-11 rounded-lg object-cover flex-shrink-0"
+                className="w-11 h-11 rounded-lg object-cover shrink-0"
                 loading="lazy"
               />
               <div className="flex-1 min-w-0">
@@ -278,14 +277,14 @@ export default function PourToi({ socialImages, featured, spotlight }: Props) {
                   {r.cuisine.split(',')[0].trim()} · {r.location.split(',').pop()?.trim()}
                 </div>
               </div>
-              <div className="text-[10px] text-[#E4002B] font-medium flex-shrink-0">{trendTags[i]}</div>
+              <div className="text-[10px] text-[#E4002B] font-medium shrink-0">{trendTags[i]}</div>
             </div>
           ))}
         </div>
       </div>
 
       {/* ── BOTTOM CTA ── */}
-      <div className="mx-3 my-6 rounded-2xl overflow-hidden relative h-[42vw] min-h-[160px]">
+      <div className="mx-3 my-6 rounded-2xl overflow-hidden relative h-[42vw] min-h-40">
         <img
           src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=85"
           className="w-full h-full object-cover brightness-50"

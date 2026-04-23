@@ -47,7 +47,7 @@ export default function Home({ featured, stats }: Props) {
       {/* ── HEADER ── */}
       <header className="sticky top-0 z-40 bg-[#FAF8F4] border-b border-gray-100 px-5 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <div className="w-[38px] h-[38px] bg-[#E4002B] rounded-full flex items-center justify-center text-xl">
+          <div className="w-9.5 h-9.5 bg-[#E4002B] rounded-full flex items-center justify-center text-xl">
             🌟
           </div>
           <div>
@@ -110,7 +110,7 @@ export default function Home({ featured, stats }: Props) {
           <button
             key={f.key}
             onClick={() => setActiveFilter(f.key)}
-            className={`whitespace-nowrap px-4 py-[7px] rounded-full text-xs font-medium border-[1.5px] transition-all tracking-tight ${
+            className={`whitespace-nowrap px-4 py-1.75 rounded-full text-xs font-medium border-[1.5px] transition-all tracking-tight ${
               activeFilter === f.key
                 ? 'bg-[#1A1A1A] border-[#1A1A1A] text-white'
                 : 'bg-white border-gray-200 text-[#1A1A1A] hover:border-[#E4002B] hover:text-[#E4002B]'
@@ -136,7 +136,7 @@ export default function Home({ featured, stats }: Props) {
 
       {/* ── INSPIRATION BAND ── */}
       <div className="mx-5 my-6 bg-[#E4002B] text-white rounded-[20px] p-7 relative overflow-hidden">
-        <div className="absolute right-5 bottom-[-10px] text-[80px] opacity-[0.08] pointer-events-none">⭐</div>
+        <div className="absolute right-5 -bottom-2.5 text-[80px] opacity-[0.08] pointer-events-none">⭐</div>
         <p className="text-[10px] tracking-[0.25em] uppercase text-white/70 mb-2">✦ Nouvelle fonctionnalité</p>
         <h3 className="font-cormorant text-[26px] font-light leading-tight mb-4">
           Swipez votre prochain<br />repas de rêve
@@ -178,7 +178,7 @@ export default function Home({ featured, stats }: Props) {
             <img
               src={bibImages[i % bibImages.length]}
               alt={r.name}
-              className="w-[72px] h-[72px] rounded-xl object-cover flex-shrink-0 bg-gray-100"
+              className="w-18 h-18 rounded-xl object-cover shrink-0 bg-gray-100"
               loading="lazy"
             />
             <div className="flex-1 min-w-0">
@@ -190,7 +190,7 @@ export default function Home({ featured, stats }: Props) {
                 {r.cuisine} · {r.location.split(',').slice(-1)[0].trim()}
               </div>
             </div>
-            <div className="font-cormorant text-base font-semibold text-[#E4002B] flex-shrink-0 ml-auto">
+            <div className="font-cormorant text-base font-semibold text-[#E4002B] shrink-0 ml-auto">
               {r.price}
             </div>
           </div>
