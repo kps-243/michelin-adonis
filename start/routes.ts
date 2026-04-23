@@ -9,6 +9,7 @@
 
 import { middleware } from '#start/kernel'
 import { controllers } from '#generated/controllers'
+import Restaurant from '#models/restaurant'
 import router from '@adonisjs/core/services/router'
 
 //router.on('/').renderInertia('home', {}).as('home')
@@ -36,6 +37,23 @@ const PourToiController = () => import('#controllers/pour_toi_controller')
 router.get('/', [HomeController, 'index']).as('home')
 router.get('/decouverte', [SwipeController, 'index']).as('Swipe')
 router.get('/pour-toi', [PourToiController, 'index']).as('PourToi')
+router
+  .get('/map', async ({ inertia }) => {
+    const restaurants = await Restaurant.query()
+      .whereNotNull('lat')
+      .whereNotNull('lng')
+      .select(['id', 'name', 'lat', 'lng'])
+
+    return (inertia as any).render('Map', {
+      restaurants: restaurants.map((restaurant) => ({
+        id: restaurant.id,
+        name: restaurant.name,
+        lat: Number(restaurant.lat),
+        lng: Number(restaurant.lng),
+      })),
+    })
+  })
+  .as('map')
 
 const RestaurantsController = () => import('#controllers/restaurants_controller')
 router.resource('restaurants', RestaurantsController)
