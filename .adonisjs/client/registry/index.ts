@@ -54,6 +54,12 @@ const routes = {
     tokens: [{"old":"/pour-toi","type":0,"val":"pour-toi","end":""}],
     types: placeholder as Registry['PourToi']['types'],
   },
+  'map': {
+    methods: ["GET","HEAD"],
+    pattern: '/map',
+    tokens: [{"old":"/map","type":0,"val":"map","end":""}],
+    types: placeholder as Registry['map']['types'],
+  },
   'restaurants.index': {
     methods: ["GET","HEAD"],
     pattern: '/restaurants',

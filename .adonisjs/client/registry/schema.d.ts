@@ -103,6 +103,18 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/pour_toi_controller').default['index']>>>
     }
   }
+  'map': {
+    methods: ["GET","HEAD"]
+    pattern: '/map'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
   'restaurants.index': {
     methods: ["GET","HEAD"]
     pattern: '/restaurants'
