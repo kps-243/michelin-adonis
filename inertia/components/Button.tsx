@@ -30,7 +30,7 @@ export default function Button({
       'bg-red-primary text-white hover:bg-red-secondary active:bg-red-secondary ' +
       'disabled:bg-gray-300 disabled:text-gray-500',
     soft:
-      'bg-red-primary/30 text-white hover:bg-red-secondary/60 active:bg-red-secondary/70 ' +
+      'bg-red-primary text-white hover:bg-red-secondary/60 active:bg-red-secondary/70 ' +
       'disabled:bg-red-primary/25',
     ghost:
       'bg-transparent text-red-primary hover:bg-red-secondary/10 hover:text-red-secondary ' +
