@@ -14,12 +14,12 @@ export default function RestaurantCard({ restaurant: r }: Props) {
       href={r.michelinUrl}
       target="_blank"
       rel="noreferrer"
-      className="flex-shrink-0 w-[220px] bg-white rounded-2xl overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.07)] transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_28px_rgba(0,0,0,0.13)] cursor-pointer block"
+      className="shrink-0 w-55 bg-white rounded-2xl overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.07)] transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_28px_rgba(0,0,0,0.13)] cursor-pointer block"
     >
       <img
         src={r.image}
         alt={r.name}
-        className="w-full h-[140px] object-cover bg-gray-100"
+        className="w-full h-35 object-cover bg-gray-100"
         loading="lazy"
       />
       <div className="p-3">
