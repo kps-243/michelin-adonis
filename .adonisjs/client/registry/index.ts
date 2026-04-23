@@ -60,6 +60,18 @@ const routes = {
     tokens: [{"old":"/map","type":0,"val":"map","end":""}],
     types: placeholder as Registry['map']['types'],
   },
+  'search': {
+    methods: ["GET","HEAD"],
+    pattern: '/search',
+    tokens: [{"old":"/search","type":0,"val":"search","end":""}],
+    types: placeholder as Registry['search']['types'],
+  },
+  'users.show': {
+    methods: ["GET","HEAD"],
+    pattern: '/users/:id',
+    tokens: [{"old":"/users/:id","type":0,"val":"users","end":""},{"old":"/users/:id","type":1,"val":"id","end":""}],
+    types: placeholder as Registry['users.show']['types'],
+  },
   'restaurants.index': {
     methods: ["GET","HEAD"],
     pattern: '/restaurants',

@@ -115,6 +115,30 @@ export interface Registry {
       errorResponse: unknown
     }
   }
+  'search': {
+    methods: ["GET","HEAD"]
+    pattern: '/search'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/search_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/search_controller').default['index']>>>
+    }
+  }
+  'users.show': {
+    methods: ["GET","HEAD"]
+    pattern: '/users/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/public_profiles_controller').default['show']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/public_profiles_controller').default['show']>>>
+    }
+  }
   'restaurants.index': {
     methods: ["GET","HEAD"]
     pattern: '/restaurants'

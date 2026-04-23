@@ -15,6 +15,10 @@ export interface ApiDefinition {
   swipe: typeof routes['Swipe']
   pourToi: typeof routes['PourToi']
   map: typeof routes['map']
+  search: typeof routes['search']
+  users: {
+    show: typeof routes['users.show']
+  }
   restaurants: {
     index: typeof routes['restaurants.index']
     show: typeof routes['restaurants.show']
