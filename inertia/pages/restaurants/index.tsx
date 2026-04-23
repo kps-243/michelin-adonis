@@ -3,6 +3,7 @@ import { useState } from 'react'
 import NewSection from '~/components/NewSection'
 import SearchBar from '~/components/SearchBar'
 import PrimaryTitle from '~/components/PrimaryTitle'
+import MapSwitch from '~/components/MapSwitch'
 
 interface RestaurantItem {
   id: number
@@ -76,6 +77,8 @@ export default function RestaurantsIndex({ restaurants }: Props) {
         )}
       </div>
 
+      <MapSwitch isMapView={false} />
+
     </div>
   )
 }
@@ -133,7 +136,7 @@ function RestaurantCard({ r }: { r: RestaurantItem }) {
         </p>
 
         {/* Bottom row */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-start">
           <div className="flex items-center">
             <div className="w-7 h-7 rounded-full bg-gray-400 border-[1.5px] border-white/50" />
             <div className="w-7 h-7 rounded-full bg-gray-500 border-[1.5px] border-white/50 -ml-2.5" />
@@ -144,17 +147,6 @@ function RestaurantCard({ r }: { r: RestaurantItem }) {
               +
             </button>
           </div>
-
-          <button
-            aria-label="Voir sur la carte"
-            className="w-11 h-11 rounded-full bg-red-primary flex items-center justify-center text-white shadow-lg"
-            onClick={(e) => e.preventDefault()}
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
-              <circle cx="12" cy="9" r="2.5" fill="currentColor" stroke="none"/>
-            </svg>
-          </button>
         </div>
       </div>
     </Link>

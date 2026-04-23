@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Head } from '@inertiajs/react'
 import PinRestau from '../ressources/images/logos/pin-restau.svg'
+import MapSwitch from '~/components/MapSwitch'
 
 interface RestaurantPin {
   id: number
@@ -30,7 +31,7 @@ export default function MapPage({ restaurants }: Props) {
       })
 
       restaurants.forEach((restaurant) => {
-        new window.google.maps.Marker({
+        const marker = new window.google.maps.Marker({
           position: { lat: Number(restaurant.lat), lng: Number(restaurant.lng) },
           map,
           title: restaurant.name,
@@ -38,6 +39,10 @@ export default function MapPage({ restaurants }: Props) {
             url: PinRestau,
             scaledSize: new window.google.maps.Size(28, 36),
           },
+        })
+
+        marker.addListener('click', () => {
+          window.location.href = `/restaurants/${restaurant.id}`
         })
       })
 
@@ -107,6 +112,7 @@ export default function MapPage({ restaurants }: Props) {
         )}
         <div ref={mapRef} className="w-full h-full" />
       </div>
+      <MapSwitch isMapView={true} />
     </>
   )
 }
