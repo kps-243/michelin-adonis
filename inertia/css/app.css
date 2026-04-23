@@ -101,13 +101,14 @@
   font-style: italic;
 }
 
-/* ── Tailwind v4 font utilities ── */
+/* ── Tailwind v4 design tokens ── */
 @theme {
-  --font-figtree: 'Figtree', system-ui, sans-serif;
+  --font-title: 'Figtree', system-ui, sans-serif;
   --font-helvetica: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --font-barlow: 'Barlow Condensed', 'Barlow', system-ui, sans-serif;
   --font-cormorant: 'Cormorant Garamond', Georgia, serif;
   --font-dm: 'DM Sans', system-ui, sans-serif;
+  --color-red-primary: #AB152E;
 }
 
 :root {

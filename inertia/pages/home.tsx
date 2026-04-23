@@ -3,6 +3,8 @@ import { Link } from '@inertiajs/react'
 import BottomNav from '../components/BottomNav'
 import RestaurantCard from '../components/RestaurantCard'
 import type { Restaurant } from '../../app/services/restaurant_service'
+import PrimaryTitle from '~/components/PrimaryTitle'
+import SecondaryTitle from '~/components/SecondaryTitle'
 
 interface Props {
   featured: {
@@ -50,10 +52,8 @@ export default function Home({ featured, stats }: Props) {
             🌟
           </div>
           <div>
-            <span className="font-bebas text-[22px] tracking-widest text-[#1A1A1A]">MORGAN</span>
-            <span className="block text-[9px] tracking-[0.2em] text-gray-500 uppercase -mt-1">
-              Guide · Nouvelle Génération
-            </span>
+            <PrimaryTitle children="Michelin"/>
+            <SecondaryTitle hidden={true} children="Yes"/>
           </div>
         </div>
         <button className="w-10 h-10 rounded-full border-[1.5px] border-gray-200 flex items-center justify-center text-base hover:border-[#E4002B] transition-colors">
