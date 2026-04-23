@@ -78,7 +78,7 @@ export default function Home({ featured }: Props) {
       <div className="mt-4">
         <SearchBar
           placeholder="Destination ou nom de l'hôtel ..."
-          onSearch={(q) => console.log('Recherche:', q)}
+          onSearch={(q) => router.visit(`/search?q=${encodeURIComponent(q)}`)}
         />
       </div>
       {/* ── A LA UNE ── */}

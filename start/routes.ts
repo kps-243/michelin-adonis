@@ -55,6 +55,14 @@ router
   })
   .as('map')
 
+// Search
+const SearchController = () => import('#controllers/search_controller')
+router.get('/search', [SearchController, 'index']).as('search')
+
+// Public profiles (influencers & experts)
+const PublicProfilesController = () => import('#controllers/public_profiles_controller')
+router.get('/users/:id', [PublicProfilesController, 'show']).as('users.show')
+
 // Public restaurant pages
 const RestaurantsController = () => import('#controllers/restaurants_controller')
 router.get('/restaurants', [RestaurantsController, 'index']).as('restaurants.index')

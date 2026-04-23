@@ -13,6 +13,8 @@ export type ScannedRoutes = {
     'Swipe': { paramsTuple?: []; params?: {} }
     'PourToi': { paramsTuple?: []; params?: {} }
     'map': { paramsTuple?: []; params?: {} }
+    'search': { paramsTuple?: []; params?: {} }
+    'users.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'restaurants.index': { paramsTuple?: []; params?: {} }
     'restaurants.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'admin.restaurants.index': { paramsTuple?: []; params?: {} }
@@ -33,6 +35,8 @@ export type ScannedRoutes = {
     'Swipe': { paramsTuple?: []; params?: {} }
     'PourToi': { paramsTuple?: []; params?: {} }
     'map': { paramsTuple?: []; params?: {} }
+    'search': { paramsTuple?: []; params?: {} }
+    'users.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'restaurants.index': { paramsTuple?: []; params?: {} }
     'restaurants.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'admin.restaurants.index': { paramsTuple?: []; params?: {} }
@@ -49,6 +53,8 @@ export type ScannedRoutes = {
     'Swipe': { paramsTuple?: []; params?: {} }
     'PourToi': { paramsTuple?: []; params?: {} }
     'map': { paramsTuple?: []; params?: {} }
+    'search': { paramsTuple?: []; params?: {} }
+    'users.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'restaurants.index': { paramsTuple?: []; params?: {} }
     'restaurants.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'admin.restaurants.index': { paramsTuple?: []; params?: {} }
