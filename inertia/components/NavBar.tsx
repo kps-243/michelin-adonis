@@ -8,6 +8,8 @@ import BedIcon from '../ressources/images/icons/bed-icon.svg'
 import BedOutlineIcon from '../ressources/images/icons/bed-outline-icon.svg'
 import ProfileIcon from '../ressources/images/icons/profile-icon.svg'
 import ProfileOutlineIcon from '../ressources/images/icons/profile-outline-icon.svg'
+import HomeIcon from '../ressources/images/icons/home-icon.svg'
+import HomeOutlineIcon from '../ressources/images/icons/home-outline-icon.svg'
 
 export default function NavBar() {
   const { url } = usePage()
@@ -17,15 +19,22 @@ export default function NavBar() {
       id: 'home',
       label: 'Accueil',
       href: '/',
-      icon: PlatIcon,
-      outlineIcon: PlatOutlineIcon,
+      icon: HomeIcon,
+      outlineIcon: HomeOutlineIcon,
     },
     {
       id: 'pour-toi',
       label: 'PourToi',
-      href: '/pour-toi',
+      href: '/decouverte',
       icon: HeartIcon,
       outlineIcon: HeartOutlineIcon,
+    },
+    {
+      id: 'restaurants',
+      label: 'Restaurants',
+      href: '/restaurants',
+      icon: PlatIcon,
+      outlineIcon: PlatOutlineIcon,
     },
     {
       id: 'sejours',
@@ -33,13 +42,6 @@ export default function NavBar() {
       href: '/sejours',
       icon: BedIcon,
       outlineIcon: BedOutlineIcon,
-    },
-    {
-      id: 'restaurants',
-      label: 'Restaurants',
-      href: '/restaurants',
-      icon: HeartIcon,
-      outlineIcon: HeartOutlineIcon,
     },
     {
       id: 'profile',
