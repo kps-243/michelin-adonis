@@ -1,5 +1,6 @@
 import { Link, router } from '@inertiajs/react'
 import SecondaryTitle from '~/components/SecondaryTitle'
+import { MichelinStar, MichelinStars } from '~/components/MichelinStar'
 
 interface Restaurant {
   id: number
@@ -15,11 +16,11 @@ interface Props {
   restaurants: Restaurant[]
 }
 
+const STAR_COUNT: Record<string, number> = { THREE: 3, TWO: 2, ONE: 1 }
+
 function starLabel(star: Restaurant['michelinStar']) {
-  if (star === 'THREE') return { text: '⭐⭐⭐', cls: 'bg-amber-50 text-amber-700' }
-  if (star === 'TWO') return { text: '⭐⭐', cls: 'bg-amber-50 text-amber-700' }
-  if (star === 'ONE') return { text: '⭐', cls: 'bg-amber-50 text-amber-700' }
-  return null
+  if (!star) return null
+  return { count: STAR_COUNT[star], cls: 'bg-amber-50 text-amber-700' }
 }
 
 export default function AdminRestaurantIndex({ restaurants }: Props) {
@@ -82,8 +83,8 @@ export default function AdminRestaurantIndex({ restaurants }: Props) {
                   className="bg-white rounded-2xl p-4 shadow-[0_2px_10px_rgba(0,0,0,0.06)] flex items-center gap-4"
                 >
                   {/* Star badge */}
-                  <div className="w-11 h-11 rounded-full bg-[#EFEFEF] flex items-center justify-center shrink-0 text-[15px]">
-                    {star ? star.text[0] + '⭐' : '🍽'}
+                  <div className="w-11 h-11 rounded-full bg-[#EFEFEF] flex items-center justify-center shrink-0">
+                    {star ? <MichelinStar size={18} /> : <span className="text-[15px]">🍽</span>}
                   </div>
 
                   {/* Info */}
@@ -93,8 +94,8 @@ export default function AdminRestaurantIndex({ restaurants }: Props) {
                       {r.cuisine} · {r.city}, {r.country}
                     </p>
                     {star && (
-                      <span className={`inline-block text-[10px] font-semibold px-2 py-0.5 rounded-full mt-1 ${star.cls}`}>
-                        {star.text}
+                      <span className={`inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full mt-1 ${star.cls}`}>
+                        <MichelinStars count={star.count} size={10} />
                       </span>
                     )}
                   </div>

@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback } from 'react'
 import { Link } from '@inertiajs/react'
 import type { Restaurant } from '../../app/services/restaurant_service'
+import { MichelinStar, MichelinStars } from '~/components/MichelinStar'
 
 interface Props {
   cards: Restaurant[]
@@ -225,7 +226,7 @@ export default function Swipe({ cards: initialCards }: Props) {
               {/* Award badge */}
               {topCard.stars > 0 && (
                 <div className="absolute top-3 right-3 bg-[#E4002B] text-white text-[10px] font-bold px-2.5 py-1 rounded-full tracking-wide">
-                  {'⭐'.repeat(topCard.stars)} {topCard.stars} étoile{topCard.stars > 1 ? 's' : ''}
+                  <MichelinStars count={topCard.stars} size={10} /> {topCard.stars} étoile{topCard.stars > 1 ? 's' : ''}
                 </div>
               )}
               {topCard.isBib && !topCard.stars && (
@@ -377,7 +378,7 @@ export default function Swipe({ cards: initialCards }: Props) {
                     className="absolute top-3 left-3 text-white text-[11px] font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5"
                     style={{ background: '#E4002B' }}
                   >
-                    <span>⭐</span>
+                    <MichelinStar size={13} />
                     <span>{starsLabel(selectedRestaurant.stars)}</span>
                   </div>
                 )}

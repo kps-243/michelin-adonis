@@ -120,9 +120,9 @@ export default function AdminRestaurantEdit({ restaurant }: Props) {
             className={inputCls(!!form.errors.michelinStar)}
           >
             <option value="">— Pas d'étoile —</option>
-            <option value="ONE">⭐ 1 Étoile</option>
-            <option value="TWO">⭐⭐ 2 Étoiles</option>
-            <option value="THREE">⭐⭐⭐ 3 Étoiles</option>
+            <option value="ONE">✦ 1 Étoile Michelin</option>
+            <option value="TWO">✦✦ 2 Étoiles Michelin</option>
+            <option value="THREE">✦✦✦ 3 Étoiles Michelin</option>
           </select>
         </Field>
 

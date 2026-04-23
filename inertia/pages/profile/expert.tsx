@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import SecondaryTitle from '~/components/SecondaryTitle'
 import { csrfPost } from '~/utils/api'
+import { MichelinStars } from '~/components/MichelinStar'
 
 interface User {
   id: number
@@ -35,9 +36,6 @@ const CRITIQUE_NAMES = [
 
 const CRITIQUE_STARS = [3, 2, 3, 3]
 
-function StarRow({ n }: { n: number }) {
-  return <span className="text-amber-400 text-[11px]">{'⭐'.repeat(n)}</span>
-}
 
 export default function ExpertProfile({ user, isFollowing = false }: Props) {
   const [following, setFollowing] = useState(isFollowing)
@@ -133,7 +131,7 @@ export default function ExpertProfile({ user, isFollowing = false }: Props) {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-title text-[14px] font-semibold text-gray-900 truncate">{name}</p>
-                  <StarRow n={CRITIQUE_STARS[i]} />
+                  <MichelinStars count={CRITIQUE_STARS[i]} size={11} />
                   <p className="text-[11px] text-gray-400 mt-0.5 line-clamp-2">
                     Une expérience gastronomique exceptionnelle, digne des plus grandes tables.
                   </p>

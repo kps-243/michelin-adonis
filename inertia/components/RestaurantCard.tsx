@@ -1,11 +1,8 @@
 import type { Restaurant } from '../../app/services/restaurant_service'
+import { MichelinStars } from './MichelinStar'
 
 interface Props {
   restaurant: Restaurant
-}
-
-function starsHtml(n: number) {
-  return '⭐'.repeat(n)
 }
 
 export default function RestaurantCard({ restaurant: r }: Props) {
@@ -27,7 +24,7 @@ export default function RestaurantCard({ restaurant: r }: Props) {
         <div className="flex items-center gap-1 mb-1.5">
           {r.stars > 0 ? (
             <>
-              <span className="text-[#E4002B] text-xs">{starsHtml(r.stars)}</span>
+              <MichelinStars count={r.stars} size={12} />
               <span className="text-[10px] tracking-wider text-gray-500 uppercase">
                 {r.stars} Étoile{r.stars > 1 ? 's' : ''}
               </span>
