@@ -6,216 +6,185 @@ interface Props {
   cards: Restaurant[]
 }
 
-interface HistoryEntry {
-  direction: 'left' | 'right' | 'up'
-  restaurant: Restaurant
-  index: number
-}
-
-interface Toast {
-  msg: string
-  type: 'like' | 'nope' | 'super'
-  visible: boolean
-}
-
 export default function Swipe({ cards: initialCards }: Props) {
   const [cards] = useState<Restaurant[]>(initialCards)
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [liked, setLiked] = useState<Restaurant[]>([])
-  const [history, setHistory] = useState<HistoryEntry[]>([])
-  const [toast, setToast] = useState<Toast>({ msg: '', type: 'like', visible: false })
-  const [showLikedPill, setShowLikedPill] = useState(false)
-  const [stampState, setStampState] = useState<'none' | 'like' | 'nope' | 'super'>('none')
-  const [stampOpacity, setStampOpacity] = useState(0)
   const [isAnimatingOut, setIsAnimatingOut] = useState(false)
-  const [outDirection, setOutDirection] = useState<'left' | 'right' | 'up' | null>(null)
+  const [outDirection, setOutDirection] = useState<'left' | 'right' | null>(null)
+  const [selectedRestaurant, setSelectedRestaurant] = useState<Restaurant | null>(null)
+  const [sheetVisible, setSheetVisible] = useState(false)
 
-  const dragRef = useRef({ isDragging: false, startX: 0, startY: 0, currentX: 0, currentY: 0 })
+  const dragRef = useRef({ startX: 0, startY: 0, currentX: 0, moved: false })
+  const isTouchSession = useRef(false)
   const cardRef = useRef<HTMLDivElement>(null)
-  const toastTimer = useRef<ReturnType<typeof setTimeout>>()
 
   const remaining = cards.slice(currentIndex, currentIndex + 3)
   const isEmpty = remaining.length === 0
-
-  function starsLabel(n: number) {
-    if (n === 3) return '⭐⭐⭐ 3 Étoiles'
-    if (n === 2) return '⭐⭐ 2 Étoiles'
-    if (n === 1) return '⭐ 1 Étoile'
-    return null
-  }
-
-  function showToast(msg: string, type: Toast['type']) {
-    clearTimeout(toastTimer.current)
-    setToast({ msg, type, visible: true })
-    toastTimer.current = setTimeout(() => setToast((t) => ({ ...t, visible: false })), 2000)
-  }
+  const topCard = remaining[0]
 
   const animateOut = useCallback(
-    (direction: 'left' | 'right' | 'up') => {
+    (direction: 'left' | 'right') => {
       if (isAnimatingOut) return
       setOutDirection(direction)
       setIsAnimatingOut(true)
-      setStampOpacity(0)
-
-      const r = cards[currentIndex]
-      setHistory((h) => [...h, { direction, restaurant: r, index: currentIndex }])
-
-      if (direction === 'right') {
-        setLiked((l) => [...l, r])
-        showToast(`❤ Sauvegardé : ${r.name}`, 'like')
-        setShowLikedPill(true)
-        setTimeout(() => setShowLikedPill(false), 2500)
-      } else if (direction === 'up') {
-        setLiked((l) => [...l, { ...r, award: r.award + ' [SUPER]' }])
-        showToast(`⭐ Super Like : ${r.name}`, 'super')
-        setShowLikedPill(true)
-        setTimeout(() => setShowLikedPill(false), 2500)
-      } else {
-        showToast('✕ Passé', 'nope')
-      }
-
       setTimeout(() => {
         setCurrentIndex((i) => i + 1)
         setIsAnimatingOut(false)
         setOutDirection(null)
-        setStampState('none')
-        if (cardRef.current) {
-          cardRef.current.style.transform = ''
-        }
+        if (cardRef.current) cardRef.current.style.transform = ''
       }, 380)
     },
-    [cards, currentIndex, isAnimatingOut]
+    [isAnimatingOut]
   )
 
-  // ─── TOUCH/MOUSE HANDLERS ───
-  function onStart(e: React.TouchEvent | React.MouseEvent) {
-    if (isAnimatingOut) return
-    const point = 'touches' in e ? e.touches[0] : e
-    dragRef.current = {
-      isDragging: true,
-      startX: point.clientX,
-      startY: point.clientY,
-      currentX: 0,
-      currentY: 0,
+  function snapBack() {
+    if (cardRef.current) {
+      cardRef.current.style.transition = 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)'
+      cardRef.current.style.transform = 'none'
     }
+  }
+
+  // ── TOUCH handlers (mobile) ──
+  function onTouchStart(e: React.TouchEvent) {
+    if (isAnimatingOut || sheetVisible) return
+    isTouchSession.current = true
+    const t = e.touches[0]
+    dragRef.current = { startX: t.clientX, startY: t.clientY, currentX: 0, moved: false }
     if (cardRef.current) cardRef.current.style.transition = 'none'
   }
 
-  function onMove(e: React.TouchEvent | React.MouseEvent) {
-    if (!dragRef.current.isDragging || isAnimatingOut) return
-    if ('cancelable' in e && e.cancelable) e.preventDefault()
-    const point = 'touches' in e ? e.touches[0] : e
-    const dx = point.clientX - dragRef.current.startX
-    const dy = point.clientY - dragRef.current.startY
+  function onTouchMove(e: React.TouchEvent) {
+    if (isAnimatingOut) return
+    const t = e.touches[0]
+    const dx = t.clientX - dragRef.current.startX
+    const dy = t.clientY - dragRef.current.startY
     dragRef.current.currentX = dx
-    dragRef.current.currentY = dy
-
-    const rotate = dx * 0.08
+    if (Math.abs(dx) > 8 || Math.abs(dy) > 8) dragRef.current.moved = true
     if (cardRef.current) {
-      cardRef.current.style.transform = `translateX(${dx}px) translateY(${dy * 0.3}px) rotate(${rotate}deg)`
-    }
-
-    if (dx > 30) {
-      setStampState('like')
-      setStampOpacity(Math.min(dx / 80, 1))
-    } else if (dx < -30) {
-      setStampState('nope')
-      setStampOpacity(Math.min(-dx / 80, 1))
-    } else {
-      setStampState('none')
-      setStampOpacity(0)
+      cardRef.current.style.transform = `translateX(${dx}px) translateY(${dy * 0.2}px) rotate(${dx * 0.06}deg)`
     }
   }
 
-  function onEnd() {
-    if (!dragRef.current.isDragging) return
-    dragRef.current.isDragging = false
-    const { currentX, currentY } = dragRef.current
-
-    if (currentX > 80) {
+  function onTouchEnd(e: React.TouchEvent) {
+    const { currentX, moved } = dragRef.current
+    if (!moved) {
+      e.preventDefault() // bloque le ghost click synthétique du navigateur mobile
+      snapBack()
+      openSheet(topCard)
+    } else if (currentX > 80) {
       animateOut('right')
     } else if (currentX < -80) {
       animateOut('left')
-    } else if (currentY < -120) {
-      animateOut('up')
     } else {
-      if (cardRef.current) {
-        cardRef.current.style.transition = 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)'
-        cardRef.current.style.transform = 'none'
-      }
-      setStampState('none')
-      setStampOpacity(0)
+      snapBack()
     }
   }
 
-  function rewind() {
-    if (history.length === 0) return
-    const last = history[history.length - 1]
-    setHistory((h) => h.slice(0, -1))
-    if (last.direction === 'right' || last.direction === 'up') {
-      setLiked((l) => l.filter((r) => r.id !== last.restaurant.id))
+  // ── MOUSE handlers (desktop only) ──
+  const mouseActive = useRef(false)
+
+  function onMouseDown(e: React.MouseEvent) {
+    if (isTouchSession.current || isAnimatingOut || sheetVisible) return
+    mouseActive.current = true
+    dragRef.current = { startX: e.clientX, startY: e.clientY, currentX: 0, moved: false }
+    if (cardRef.current) cardRef.current.style.transition = 'none'
+  }
+
+  function onMouseMove(e: React.MouseEvent) {
+    if (!mouseActive.current || isAnimatingOut) return
+    const dx = e.clientX - dragRef.current.startX
+    const dy = e.clientY - dragRef.current.startY
+    dragRef.current.currentX = dx
+    if (Math.abs(dx) > 8 || Math.abs(dy) > 8) dragRef.current.moved = true
+    if (cardRef.current) {
+      cardRef.current.style.transform = `translateX(${dx}px) translateY(${dy * 0.2}px) rotate(${dx * 0.06}deg)`
     }
-    setCurrentIndex(last.index)
-    showToast('↩ Annulé', 'like')
   }
 
-  function triggerSwipe(dir: 'left' | 'right' | 'up') {
-    if (isEmpty || isAnimatingOut) return
-    if (dir === 'right') setStampState('like')
-    else if (dir === 'left') setStampState('nope')
-    else setStampState('super')
-    setStampOpacity(1)
-    setTimeout(() => animateOut(dir), 100)
+  function onMouseUp() {
+    if (!mouseActive.current) return
+    mouseActive.current = false
+    const { currentX, moved } = dragRef.current
+    if (!moved) {
+      snapBack()
+      openSheet(topCard)
+    } else if (currentX > 80) {
+      animateOut('right')
+    } else if (currentX < -80) {
+      animateOut('left')
+    } else {
+      snapBack()
+    }
   }
 
-  // ─── OUT ANIMATION TRANSFORM ───
+  function onMouseLeave() {
+    if (!mouseActive.current) return
+    mouseActive.current = false
+    snapBack()
+  }
+
+  function openSheet(r: Restaurant) {
+    setSelectedRestaurant(r)
+    setSheetVisible(true)
+  }
+
+  function closeSheet() {
+    setSheetVisible(false)
+    setTimeout(() => setSelectedRestaurant(null), 350)
+  }
+
   function getOutTransform() {
     if (!isAnimatingOut) return undefined
     const W = window.innerWidth
-    const H = window.innerHeight
-    if (outDirection === 'right') return `translateX(${W * 1.5}px) rotate(30deg)`
-    if (outDirection === 'left') return `translateX(${-W * 1.5}px) rotate(-30deg)`
-    if (outDirection === 'up') return `translateY(${-H * 1.2}px)`
+    if (outDirection === 'right') return `translateX(${W * 1.5}px) rotate(25deg)`
+    if (outDirection === 'left') return `translateX(${-W * 1.5}px) rotate(-25deg)`
     return undefined
   }
 
-  const topCard = remaining[0]
+  function getOutTransform() {
+    if (!isAnimatingOut) return undefined
+    const W = window.innerWidth
+    if (outDirection === 'right') return `translateX(${W * 1.5}px) rotate(25deg)`
+    if (outDirection === 'left') return `translateX(${-W * 1.5}px) rotate(-25deg)`
+    return undefined
+  }
+
+  function starsLabel(n: number) {
+    if (n === 3) return '3 étoiles Michelin'
+    if (n === 2) return '2 étoiles Michelin'
+    if (n === 1) return '1 étoile Michelin'
+    return null
+  }
 
   return (
-    <div className="h-dvh bg-[#0D0D0D] text-[#F5F0E8] font-dm flex flex-col overflow-hidden">
-      {/* ── HEADER ── */}
-      <header className="h-15 flex items-center justify-between px-5 border-b border-white/6 z-10 shrink-0">
-        <Link
-          href="/"
-          className="w-9.5 h-9.5 bg-white/6 rounded-full flex items-center justify-center text-lg text-[#F5F0E8] no-underline"
-        >
-          ←
-        </Link>
-        <div className="text-center">
-          <div className="font-bebas text-[18px] tracking-[0.15em]">DÉCOUVERTE</div>
-          <div className="text-[10px] text-gray-500 tracking-widest">Swipez pour explorer</div>
-        </div>
-        <div className="bg-white/8 rounded-full px-3.5 py-1.5 text-xs text-[#C8A96E] font-medium">
-          ❤ {liked.length}
-        </div>
+    <div className="h-dvh bg-white text-[#1A1A1A] flex flex-col overflow-hidden" style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif" }}>
+
+      {/* HEADER */}
+      <header className="shrink-0 px-5 pt-4 pb-3">
+        <h1 className="text-[20px] font-semibold text-[#1A1A1A] leading-tight">
+          Recommandation du jour
+        </h1>
       </header>
 
-      {/* ── SWIPE AREA ── */}
-      <div className="flex-1 flex flex-col items-center justify-center px-4 pb-2 relative min-h-0">
-        {/* Card Stack */}
-        <div className="relative w-full max-w-90 flex-1 min-h-0">
+      {/* SWIPE AREA */}
+      <div className="flex-1 flex flex-col items-center justify-center px-4 pb-2 min-h-0">
+        <div className="relative w-full" style={{ maxWidth: 400, height: 'min(480px, calc(100dvh - 210px))' }}>
 
-          {/* Background cards (stack effect) */}
+          {/* Background cards */}
           {remaining[2] && (
-            <div className="absolute inset-0 rounded-3xl overflow-hidden bg-[#1A1A1A] shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
-              style={{ transform: 'scale(0.9) translateY(32px)', zIndex: 0 }}>
-              <img src={remaining[2].image} alt="" className="w-full h-full object-cover opacity-80" />
+            <div
+              className="absolute inset-0 overflow-hidden bg-gray-200"
+              style={{ borderRadius: 12, transform: 'scale(0.91) translateY(28px)', zIndex: 0 }}
+            >
+              <img src={remaining[2].image} alt="" className="w-full h-full object-cover" />
             </div>
           )}
           {remaining[1] && (
-            <div className="absolute inset-0 rounded-3xl overflow-hidden bg-[#1A1A1A] shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
-              style={{ transform: 'scale(0.95) translateY(16px)', zIndex: 1 }}>
-              <img src={remaining[1].image} alt="" className="w-full h-full object-cover opacity-80" />
+            <div
+              className="absolute inset-0 overflow-hidden bg-gray-200"
+              style={{ borderRadius: 12, transform: 'scale(0.955) translateY(14px)', zIndex: 1 }}
+            >
+              <img src={remaining[1].image} alt="" className="w-full h-full object-cover" />
             </div>
           )}
 
@@ -223,20 +192,22 @@ export default function Swipe({ cards: initialCards }: Props) {
           {topCard && (
             <div
               ref={cardRef}
-              className="absolute inset-0 rounded-3xl overflow-hidden bg-[#1A1A1A] cursor-grab active:cursor-grabbing shadow-[0_20px_60px_rgba(0,0,0,0.5)] select-none"
+              className="absolute inset-0 overflow-hidden cursor-pointer select-none"
               style={{
                 zIndex: 3,
-                transition: isAnimatingOut ? 'transform 0.4s ease' : undefined,
+                borderRadius: 12,
+                transition: isAnimatingOut ? 'transform 0.38s ease' : undefined,
                 transform: isAnimatingOut ? getOutTransform() : undefined,
                 willChange: 'transform',
+                boxShadow: '0 4px 24px rgba(0,0,0,0.13)',
               }}
-              onTouchStart={onStart}
-              onTouchMove={onMove as any}
-              onTouchEnd={onEnd}
-              onMouseDown={onStart}
-              onMouseMove={onMove as any}
-              onMouseUp={onEnd}
-              onMouseLeave={onEnd}
+              onTouchStart={onTouchStart}
+              onTouchMove={onTouchMove}
+              onTouchEnd={onTouchEnd}
+              onMouseDown={onMouseDown}
+              onMouseMove={onMouseMove}
+              onMouseUp={onMouseUp}
+              onMouseLeave={onMouseLeave}
             >
               <img
                 src={topCard.image}
@@ -246,148 +217,256 @@ export default function Swipe({ cards: initialCards }: Props) {
               />
 
               {/* Gradient */}
-              <div className="absolute inset-0 bg-linear-to-b from-transparent via-black/20 to-black/95 pointer-events-none" />
-
-              {/* LIKE stamp */}
               <div
-                className="absolute top-8 left-6 font-bebas text-[42px] tracking-widest border-4 border-green-500 text-green-500 px-4 py-1 rounded-lg pointer-events-none -rotate-12"
-                style={{ opacity: stampState === 'like' ? stampOpacity : 0, transition: 'opacity 0.1s', zIndex: 10 }}
-              >
-                OUVRE
-              </div>
+                className="absolute inset-0 pointer-events-none"
+                style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.04) 0%, transparent 35%, rgba(0,0,0,0.75) 100%)' }}
+              />
 
-              {/* NOPE stamp */}
-              <div
-                className="absolute top-8 right-6 font-bebas text-[42px] tracking-widest border-4 border-[#E4002B] text-[#E4002B] px-4 py-1 rounded-lg pointer-events-none rotate-12"
-                style={{ opacity: stampState === 'nope' ? stampOpacity : 0, transition: 'opacity 0.1s', zIndex: 10 }}
-              >
-                NOPE
-              </div>
-
-              {/* SUPER stamp */}
-              <div
-                className="absolute top-6 left-1/2 -translate-x-1/2 font-bebas text-[42px] tracking-widest border-4 border-amber-500 text-amber-500 px-4 py-1 rounded-lg pointer-events-none -rotate-3"
-                style={{ opacity: stampState === 'super' ? stampOpacity : 0, transition: 'opacity 0.1s', zIndex: 10 }}
-              >
-                SUPER ⭐
-              </div>
-
-              {/* Card content */}
-              <div className="absolute bottom-0 left-0 right-0 p-5 z-5">
-                <div className="flex gap-2 mb-2.5 flex-wrap">
-                  {topCard.stars > 0 && (
-                    <div className="bg-[rgba(228,0,43,0.85)] backdrop-blur-sm text-white text-[11px] font-semibold px-3 py-1.5 rounded-full tracking-wide">
-                      {starsLabel(topCard.stars)}
-                    </div>
-                  )}
-                  {topCard.isBib && !topCard.stars && (
-                    <div className="bg-[rgba(200,169,110,0.9)] text-[#1A1A1A] text-[11px] font-semibold px-3 py-1.5 rounded-full">
-                      🍽 Bib Gourmand
-                    </div>
-                  )}
-                  {topCard.greenStar && (
-                    <div className="bg-[rgba(34,197,94,0.85)] text-white text-[11px] font-semibold px-3 py-1.5 rounded-full">
-                      🌿 Green Star
-                    </div>
-                  )}
+              {/* Award badge */}
+              {topCard.stars > 0 && (
+                <div className="absolute top-3 right-3 bg-[#E4002B] text-white text-[10px] font-bold px-2.5 py-1 rounded-full tracking-wide">
+                  {'⭐'.repeat(topCard.stars)} {topCard.stars} étoile{topCard.stars > 1 ? 's' : ''}
                 </div>
+              )}
+              {topCard.isBib && !topCard.stars && (
+                <div className="absolute top-3 right-3 bg-[#E4002B] text-white text-[10px] font-bold px-2.5 py-1 rounded-full">
+                  🍽 Bib Gourmand
+                </div>
+              )}
 
-                <div className="font-cormorant text-[clamp(24px,6vw,32px)] font-semibold leading-tight mb-2 text-white">
+              {/* Bottom info */}
+              <div className="absolute bottom-0 left-0 right-0 px-4 pb-4 pt-8 pointer-events-none">
+                <div className="text-white font-semibold leading-tight mb-1" style={{ fontSize: 20 }}>
                   {topCard.name}
                 </div>
-
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="text-xs text-white/80">
-                    {(topCard.cuisine || '').split(',')[0].trim()}
-                  </span>
-                  <span className="text-white/30">·</span>
-                  <span className="font-cormorant text-sm text-[#C8A96E] font-semibold">{topCard.price}</span>
+                <div className="text-white/80 mb-1" style={{ fontSize: 12 }}>
+                  {topCard.address}
+                </div>
+                <div className="flex items-center gap-2 text-white/70" style={{ fontSize: 12 }}>
+                  <span>{topCard.price}</span>
+                  <span>·</span>
+                  <span>{(topCard.cuisine || '').split(',')[0].trim()}</span>
                 </div>
 
-                <div className="flex items-center gap-1.5 text-xs text-white/60">
-                  📍 {topCard.location}
+                {/* Avatars */}
+                <div className="flex items-center gap-1.5 mt-3">
+                  <div className="flex" style={{ marginRight: 2 }}>
+                    <div
+                      className="w-7 h-7 rounded-full border-2 border-white bg-gray-400"
+                      style={{ backgroundImage: 'url(https://i.pravatar.cc/48?img=1)', backgroundSize: 'cover', marginRight: -8 }}
+                    />
+                    <div
+                      className="w-7 h-7 rounded-full border-2 border-white bg-gray-400"
+                      style={{ backgroundImage: 'url(https://i.pravatar.cc/48?img=5)', backgroundSize: 'cover' }}
+                    />
+                  </div>
+                  <div
+                    className="w-7 h-7 rounded-full border-2 border-white flex items-center justify-center text-white font-light"
+                    style={{ background: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(4px)', fontSize: 18, pointerEvents: 'all', cursor: 'pointer' }}
+                  >
+                    +
+                  </div>
                 </div>
-
-                {topCard.description && (
-                  <p className="mt-2.5 text-xs text-white/55 leading-relaxed line-clamp-2">
-                    {topCard.description.substring(0, 120)}...
-                  </p>
-                )}
               </div>
             </div>
           )}
 
           {/* Empty state */}
           {isEmpty && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-5">
-              <div className="text-6xl mb-4">🍽</div>
-              <div className="font-cormorant text-3xl mb-2">Vous avez tout vu !</div>
-              <div className="text-sm text-gray-500 mb-6">
+            <div
+              className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 bg-gray-50"
+              style={{ borderRadius: 12 }}
+            >
+              <div className="text-5xl mb-4">🍽</div>
+              <div className="text-xl font-semibold mb-2">Vous avez tout vu !</div>
+              <div className="text-sm text-gray-400 mb-6">
                 Revenez pour de nouvelles sélections de nos inspecteurs.
               </div>
               <button
                 onClick={() => window.location.reload()}
-                className="bg-[#E4002B] text-white border-none px-7 py-3 rounded-full text-sm font-medium cursor-pointer"
+                className="bg-[#E4002B] text-white px-7 py-3 rounded-full text-sm font-medium"
               >
-                Recharger ✨
+                Recharger
               </button>
             </div>
           )}
         </div>
 
-        {/* Action buttons */}
-        {!isEmpty && (
-          <div className="flex items-center justify-center gap-5 pt-4 pb-2 shrink-0">
-            <button
-              onClick={rewind}
-              className="w-10.5 h-10.5 rounded-full bg-[#1E1E1E] border-[1.5px] border-white/10 text-gray-500 text-base flex items-center justify-center transition-all hover:scale-110 active:scale-95"
-            >
-              ↩
-            </button>
-            <button
-              onClick={() => triggerSwipe('left')}
-              className="w-14.5 h-14.5 rounded-full bg-[#1E1E1E] border-2 border-[rgba(228,0,43,0.3)] text-[#E4002B] text-2xl flex items-center justify-center shadow-[0_4px_16px_rgba(228,0,43,0.15)] transition-all hover:scale-110 active:scale-95"
-            >
-              ✕
-            </button>
-            <button
-              onClick={() => triggerSwipe('up')}
-              className="w-12 h-12 rounded-full bg-[#1E1E1E] border-2 border-[rgba(245,158,11,0.3)] text-amber-500 text-lg flex items-center justify-center transition-all hover:scale-110 active:scale-95"
-            >
-              ⭐
-            </button>
-            <button
-              onClick={() => triggerSwipe('right')}
-              className="w-14.5 h-14.5 rounded-full bg-[#E4002B] text-white text-2xl flex items-center justify-center shadow-[0_4px_20px_rgba(228,0,43,0.4)] transition-all hover:scale-110 active:scale-95"
-            >
-              ♥
-            </button>
-          </div>
-        )}
       </div>
 
-      {/* ── TOAST ── */}
-      <div
-        className={`fixed top-17.5 left-1/2 -translate-x-1/2 px-5 py-2.5 rounded-full text-[13px] font-medium text-white pointer-events-none z-1000 whitespace-nowrap transition-all duration-300 ${
-          toast.visible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-5'
-        } ${
-          toast.type === 'nope'
-            ? 'bg-[rgba(228,0,43,0.9)]'
-            : toast.type === 'super'
-            ? 'bg-[rgba(245,158,11,0.95)]'
-            : 'bg-[rgba(34,197,94,0.9)]'
-        }`}
-      >
-        {toast.msg}
-      </div>
+      {/* BOTTOM NAV */}
+      <nav className="shrink-0 h-16 bg-white border-t border-gray-100 flex items-center justify-around px-4">
+        <Link href="/" className="flex flex-col items-center gap-0.5 text-gray-400 no-underline">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+        </Link>
+        <Link href="#" className="flex flex-col items-center gap-0.5 text-[#E4002B] no-underline">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </Link>
+        <Link href="/restaurants" className="flex flex-col items-center gap-0.5 text-gray-400 no-underline">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+            <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/>
+            <path d="M7 2v20"/>
+            <path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/>
+          </svg>
+        </Link>
+        <Link href="/sejours" className="flex flex-col items-center gap-0.5 text-gray-400 no-underline">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+            <path d="M2 4v16"/>
+            <path d="M2 8h18a2 2 0 0 1 2 2v10"/>
+            <path d="M2 17h20"/>
+            <path d="M6 8v9"/>
+          </svg>
+        </Link>
+        <Link href="/profile" className="flex flex-col items-center gap-0.5 text-gray-400 no-underline">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </Link>
+      </nav>
 
-      {/* ── LIKED PILL ── */}
+      {/* MODAL — Backdrop */}
       <div
-        className={`fixed bottom-19 right-4 bg-green-500 text-white px-4 py-2 rounded-full text-xs font-semibold pointer-events-none z-50 transition-all duration-300 ${
-          showLikedPill ? 'opacity-100 scale-100' : 'opacity-0 scale-80'
-        }`}
+        className="fixed inset-0 z-40"
+        style={{
+          background: 'rgba(0,0,0,0.4)',
+          opacity: sheetVisible ? 1 : 0,
+          pointerEvents: sheetVisible ? 'auto' : 'none',
+          transition: 'opacity 0.25s ease',
+        }}
+        onClick={closeSheet}
+      />
+
+      {/* MODAL — Card (Figma: 362×532, radius 10px, padding 16px, shadow 0/4/4/0 25%) */}
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center px-4 pointer-events-none"
       >
-        ❤ {liked.length} table{liked.length > 1 ? 's' : ''} sauvegardée{liked.length > 1 ? 's' : ''}
+        <div
+          className="bg-white w-full pointer-events-auto overflow-y-auto"
+          style={{
+            maxWidth: 362,
+            maxHeight: 'min(532px, calc(100dvh - 80px))',
+            borderRadius: 10,
+            boxShadow: '0 4px 4px rgba(0,0,0,0.25)',
+            transform: sheetVisible ? 'scale(1) translateY(0)' : 'scale(0.95) translateY(16px)',
+            opacity: sheetVisible ? 1 : 0,
+            transition: 'transform 0.28s cubic-bezier(0.32,0.72,0,1), opacity 0.22s ease',
+          }}
+        >
+          {selectedRestaurant && (
+            <>
+              {/* Handle */}
+              <div className="flex justify-center pt-3 pb-0">
+                <div className="w-8 h-1 bg-gray-200 rounded-full" />
+              </div>
+
+              {/* Hero image */}
+              <div className="relative mx-4 mt-3 overflow-hidden" style={{ borderRadius: 8, height: 190 }}>
+                <img
+                  src={selectedRestaurant.image}
+                  alt={selectedRestaurant.name}
+                  className="w-full h-full object-cover"
+                />
+                {selectedRestaurant.stars > 0 && (
+                  <div
+                    className="absolute top-3 left-3 text-white text-[11px] font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5"
+                    style={{ background: '#E4002B' }}
+                  >
+                    <span>⭐</span>
+                    <span>{starsLabel(selectedRestaurant.stars)}</span>
+                  </div>
+                )}
+                {selectedRestaurant.isBib && !selectedRestaurant.stars && (
+                  <div
+                    className="absolute top-3 left-3 text-white text-[11px] font-bold px-3 py-1.5 rounded-full"
+                    style={{ background: '#E4002B' }}
+                  >
+                    🍽 Bib Gourmand
+                  </div>
+                )}
+              </div>
+
+              {/* Content — 16px padding comme Figma */}
+              <div style={{ padding: 16 }}>
+                <h2
+                  className="text-[#1A1A1A] leading-snug mb-1"
+                  style={{ fontSize: 22, fontWeight: 600 }}
+                >
+                  {selectedRestaurant.name}
+                </h2>
+
+                <p className="text-gray-500 mb-1" style={{ fontSize: 13 }}>
+                  {selectedRestaurant.address}
+                </p>
+
+                <div className="flex items-center gap-2 mb-4" style={{ fontSize: 13 }}>
+                  <span className="text-[#1A1A1A]">{selectedRestaurant.price}</span>
+                  <span className="text-gray-300">·</span>
+                  <span className="text-gray-500">{(selectedRestaurant.cuisine || '').split(',')[0].trim()}</span>
+                  {selectedRestaurant.greenStar && (
+                    <>
+                      <span className="text-gray-300">·</span>
+                      <span className="text-green-600" style={{ fontSize: 12 }}>🌿 Green Star</span>
+                    </>
+                  )}
+                </div>
+
+                {selectedRestaurant.description && (
+                  <p className="text-gray-600 leading-relaxed mb-4" style={{ fontSize: 14 }}>
+                    {selectedRestaurant.description}
+                  </p>
+                )}
+
+                {/* Téléphone + site web */}
+                <div className="flex items-center gap-5 mb-4">
+                  {selectedRestaurant.phone && (
+                    <a
+                      href={`tel:${selectedRestaurant.phone}`}
+                      className="flex items-center gap-2 no-underline"
+                      style={{ fontSize: 13, color: '#555' }}
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E4002B" strokeWidth="2">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.18 6.18l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+                      </svg>
+                      <span>{selectedRestaurant.phone}</span>
+                    </a>
+                  )}
+                  {selectedRestaurant.websiteUrl && (
+                    <a
+                      href={selectedRestaurant.websiteUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-2 no-underline"
+                      style={{ fontSize: 13, color: '#E4002B' }}
+                    >
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                      </svg>
+                      <span>Site web</span>
+                    </a>
+                  )}
+                </div>
+
+                {/* CTA */}
+                <a
+                  href={selectedRestaurant.michelinUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="block w-full text-center text-white font-semibold no-underline"
+                  style={{ background: '#E4002B', borderRadius: 8, padding: '13px 0', fontSize: 14 }}
+                >
+                  Réserver sur Michelin
+                </a>
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </div>
   )
