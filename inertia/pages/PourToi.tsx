@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from '@inertiajs/react'
 import type { Restaurant } from '../../app/services/restaurant_service'
+import { MichelinStar, MichelinStars } from '~/components/MichelinStar'
 
 interface SocialImage {
   src: string
@@ -227,7 +228,7 @@ export default function PourToi({ socialImages, featured, spotlight }: Props) {
 
       {/* ── SPOTLIGHT ── */}
       <div className="flex items-center justify-between px-5 pt-6 pb-3">
-        <h2 className="font-barlow text-xl font-black uppercase tracking-wide">⭐ Inspiré par ta liste</h2>
+        <h2 className="font-barlow text-xl font-black uppercase tracking-wide flex items-center gap-2"><MichelinStar size={16} /> Inspiré par ta liste</h2>
         <a href="#" className="text-xs text-[#E4002B] tracking-wide">Voir tout →</a>
       </div>
       <div className="flex gap-3 px-5 overflow-x-auto scrollbar-none">
@@ -246,7 +247,7 @@ export default function PourToi({ socialImages, featured, spotlight }: Props) {
               loading="lazy"
             />
             <div className="p-2.5">
-              <div className="text-xs mb-0.5">{'⭐'.repeat(r.stars)}</div>
+              <div className="mb-0.5"><MichelinStars count={r.stars} size={10} /></div>
               <div className="font-cormorant text-sm font-semibold leading-tight truncate">{r.name}</div>
               <div className="text-[10px] text-gray-500 mt-0.5">
                 📍 {r.location.split(',').pop()?.trim()}

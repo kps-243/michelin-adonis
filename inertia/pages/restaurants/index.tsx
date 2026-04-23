@@ -1,6 +1,7 @@
 import { Link } from '@inertiajs/react'
 import { useState } from 'react'
 import { csrfPost } from '~/utils/api'
+import { MichelinStars } from '~/components/MichelinStar'
 import NewSection from '~/components/NewSection'
 import SearchBar from '~/components/SearchBar'
 import PrimaryTitle from '~/components/PrimaryTitle'
@@ -27,11 +28,11 @@ const HERO_IMAGE = 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0
 
 type StarFilter = 'ALL' | 'THREE' | 'TWO' | 'ONE' | 'BIB'
 
-const FILTER_CHIPS: { key: StarFilter; label: string }[] = [
+const FILTER_CHIPS: { key: StarFilter; label: React.ReactNode }[] = [
   { key: 'ALL', label: 'Tous' },
-  { key: 'THREE', label: '⭐⭐⭐' },
-  { key: 'TWO', label: '⭐⭐' },
-  { key: 'ONE', label: '⭐' },
+  { key: 'THREE', label: <MichelinStars count={3} size={11} /> },
+  { key: 'TWO', label: <MichelinStars count={2} size={11} /> },
+  { key: 'ONE', label: <MichelinStars count={1} size={11} /> },
   { key: 'BIB', label: '🍽 Bib Gourmand' },
 ]
 

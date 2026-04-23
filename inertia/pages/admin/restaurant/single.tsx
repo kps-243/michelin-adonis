@@ -1,5 +1,6 @@
 import { Link, router } from '@inertiajs/react'
 import SecondaryTitle from '~/components/SecondaryTitle'
+import { MichelinStars } from '~/components/MichelinStar'
 
 interface Restaurant {
   id: number
@@ -23,9 +24,9 @@ interface Props {
 }
 
 const STAR_INFO = {
-  THREE: { label: '3 Étoiles Michelin', badge: '⭐⭐⭐', cls: 'bg-amber-50 text-amber-700' },
-  TWO: { label: '2 Étoiles Michelin', badge: '⭐⭐', cls: 'bg-amber-50 text-amber-700' },
-  ONE: { label: '1 Étoile Michelin', badge: '⭐', cls: 'bg-amber-50 text-amber-700' },
+  THREE: { label: '3 Étoiles Michelin', count: 3, cls: 'bg-amber-50 text-amber-700' },
+  TWO: { label: '2 Étoiles Michelin', count: 2, cls: 'bg-amber-50 text-amber-700' },
+  ONE: { label: '1 Étoile Michelin', count: 1, cls: 'bg-amber-50 text-amber-700' },
 }
 
 export default function AdminRestaurantSingle({ restaurant: r }: Props) {
@@ -67,11 +68,13 @@ export default function AdminRestaurantSingle({ restaurant: r }: Props) {
         {/* Hero card */}
         <div className="bg-gray-900 text-white rounded-2xl p-6 relative overflow-hidden lg:col-span-2">
           <div className="absolute -top-12 -right-12 w-44 h-44 bg-red-primary rounded-full opacity-10 pointer-events-none" />
-          <div className="absolute bottom-0 right-6 text-[80px] opacity-5 pointer-events-none leading-none select-none">⭐</div>
+          <div className="absolute bottom-2 right-4 opacity-5 pointer-events-none select-none">
+            <MichelinStars count={3} size={72} />
+          </div>
 
           {star ? (
             <span className={`inline-flex items-center gap-1.5 text-[11px] font-semibold px-3 py-1 rounded-full mb-4 ${star.cls}`}>
-              {star.badge} {star.label}
+              <MichelinStars count={star.count} size={11} /> {star.label}
             </span>
           ) : (
             <span className="inline-flex items-center text-[11px] font-medium px-3 py-1 rounded-full mb-4 bg-white/10 text-white/60">

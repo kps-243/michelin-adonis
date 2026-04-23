@@ -1,6 +1,7 @@
 import { Link } from '@inertiajs/react'
 import NavBar from '../components/NavBar'
 import SecondaryTitle from '~/components/SecondaryTitle'
+import { MichelinStars } from '~/components/MichelinStar'
 
 interface User {
   id: number
@@ -50,6 +51,7 @@ interface Props {
 }
 
 const STAR_COUNT: Record<string, number> = { THREE: 3, TWO: 2, ONE: 1 }
+
 
 export default function Profile({ user, followedUsers, favoriteRestaurants, visitedRestaurants }: Props) {
   const displayName = [user.firstName, user.lastName].filter(Boolean).join(' ') || user.username
@@ -205,7 +207,7 @@ export default function Profile({ user, followedUsers, favoriteRestaurants, visi
                     <p className="font-title text-[14px] font-semibold text-gray-900 truncate">{r.name}</p>
                     <p className="text-[11px] text-gray-400 truncate mt-0.5">{[r.city, r.country].filter(Boolean).join(', ')}</p>
                     {r.michelinStar && (
-                      <span className="text-amber-400 text-[11px]">{'⭐'.repeat(STAR_COUNT[r.michelinStar] ?? 1)}</span>
+                      <MichelinStars count={STAR_COUNT[r.michelinStar] ?? 1} size={11} />
                     )}
                   </div>
                   <div className="w-7 h-7 rounded-full bg-red-primary flex items-center justify-center shrink-0">
