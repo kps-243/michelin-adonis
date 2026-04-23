@@ -23,4 +23,9 @@ export interface ApiDefinition {
     update: typeof routes['restaurants.update']
     destroy: typeof routes['restaurants.destroy']
   }
+  profile: {
+    show: typeof routes['profile.show']
+    edit: typeof routes['profile.edit']
+    update: typeof routes['profile.update']
+  }
 }

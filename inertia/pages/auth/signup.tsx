@@ -4,27 +4,54 @@ export default function Signup() {
   return (
     <div className="form-container">
       <div>
-        <h1> Signup </h1>
-        <p>Enter your details below to create your account</p>
+        <h1>Créer un compte</h1>
+        <p>Renseignez vos informations pour rejoindre Michelin Guide</p>
       </div>
 
       <div>
         <Form route="new_account.store">
           {({ errors }) => (
             <>
-              <div>
-                <label htmlFor="fullName">Full name</label>
-                <input
-                  type="text"
-                  name="fullName"
-                  id="fullName"
-                  data-invalid={errors.fullName ? 'true' : undefined}
-                />
-                {errors.fullName && <div>{errors.fullName}</div>}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                <div>
+                  <label htmlFor="firstName">Prénom *</label>
+                  <input
+                    type="text"
+                    name="firstName"
+                    id="firstName"
+                    autoComplete="given-name"
+                    data-invalid={errors.firstName ? 'true' : undefined}
+                  />
+                  {errors.firstName && <div>{errors.firstName}</div>}
+                </div>
+
+                <div>
+                  <label htmlFor="lastName">Nom *</label>
+                  <input
+                    type="text"
+                    name="lastName"
+                    id="lastName"
+                    autoComplete="family-name"
+                    data-invalid={errors.lastName ? 'true' : undefined}
+                  />
+                  {errors.lastName && <div>{errors.lastName}</div>}
+                </div>
               </div>
 
               <div>
-                <label htmlFor="email">Email</label>
+                <label htmlFor="username">Nom d'utilisateur *</label>
+                <input
+                  type="text"
+                  name="username"
+                  id="username"
+                  autoComplete="username"
+                  data-invalid={errors.username ? 'true' : undefined}
+                />
+                {errors.username && <div>{errors.username}</div>}
+              </div>
+
+              <div>
+                <label htmlFor="email">Email *</label>
                 <input
                   type="email"
                   name="email"
@@ -36,7 +63,7 @@ export default function Signup() {
               </div>
 
               <div>
-                <label htmlFor="password">Password</label>
+                <label htmlFor="password">Mot de passe *</label>
                 <input
                   type="password"
                   name="password"
@@ -48,7 +75,7 @@ export default function Signup() {
               </div>
 
               <div>
-                <label htmlFor="passwordConfirmation">Confirm password</label>
+                <label htmlFor="passwordConfirmation">Confirmer le mot de passe *</label>
                 <input
                   type="password"
                   name="passwordConfirmation"
@@ -61,7 +88,7 @@ export default function Signup() {
 
               <div>
                 <button type="submit" className="button">
-                  Sign up
+                  Créer mon compte
                 </button>
               </div>
             </>
