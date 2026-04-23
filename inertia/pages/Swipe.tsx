@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback } from 'react'
 import { Link } from '@inertiajs/react'
-import BottomNav from '../components/BottomNav'
+import BottomNav from '../components/NavBar'
 import type { Restaurant } from '../../app/services/restaurant_service'
 
 interface Props {
