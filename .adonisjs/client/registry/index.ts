@@ -54,6 +54,48 @@ const routes = {
     tokens: [{"old":"/pour-toi","type":0,"val":"pour-toi","end":""}],
     types: placeholder as Registry['PourToi']['types'],
   },
+  'restaurants.index': {
+    methods: ["GET","HEAD"],
+    pattern: '/restaurants',
+    tokens: [{"old":"/restaurants","type":0,"val":"restaurants","end":""}],
+    types: placeholder as Registry['restaurants.index']['types'],
+  },
+  'restaurants.create': {
+    methods: ["GET","HEAD"],
+    pattern: '/restaurants/create',
+    tokens: [{"old":"/restaurants/create","type":0,"val":"restaurants","end":""},{"old":"/restaurants/create","type":0,"val":"create","end":""}],
+    types: placeholder as Registry['restaurants.create']['types'],
+  },
+  'restaurants.store': {
+    methods: ["POST"],
+    pattern: '/restaurants',
+    tokens: [{"old":"/restaurants","type":0,"val":"restaurants","end":""}],
+    types: placeholder as Registry['restaurants.store']['types'],
+  },
+  'restaurants.show': {
+    methods: ["GET","HEAD"],
+    pattern: '/restaurants/:id',
+    tokens: [{"old":"/restaurants/:id","type":0,"val":"restaurants","end":""},{"old":"/restaurants/:id","type":1,"val":"id","end":""}],
+    types: placeholder as Registry['restaurants.show']['types'],
+  },
+  'restaurants.edit': {
+    methods: ["GET","HEAD"],
+    pattern: '/restaurants/:id/edit',
+    tokens: [{"old":"/restaurants/:id/edit","type":0,"val":"restaurants","end":""},{"old":"/restaurants/:id/edit","type":1,"val":"id","end":""},{"old":"/restaurants/:id/edit","type":0,"val":"edit","end":""}],
+    types: placeholder as Registry['restaurants.edit']['types'],
+  },
+  'restaurants.update': {
+    methods: ["PUT","PATCH"],
+    pattern: '/restaurants/:id',
+    tokens: [{"old":"/restaurants/:id","type":0,"val":"restaurants","end":""},{"old":"/restaurants/:id","type":1,"val":"id","end":""}],
+    types: placeholder as Registry['restaurants.update']['types'],
+  },
+  'restaurants.destroy': {
+    methods: ["DELETE"],
+    pattern: '/restaurants/:id',
+    tokens: [{"old":"/restaurants/:id","type":0,"val":"restaurants","end":""},{"old":"/restaurants/:id","type":1,"val":"id","end":""}],
+    types: placeholder as Registry['restaurants.destroy']['types'],
+  },
 } as const satisfies Record<string, AdonisEndpoint>
 
 export { routes }

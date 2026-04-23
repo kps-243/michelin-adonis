@@ -36,3 +36,6 @@ const PourToiController = () => import('#controllers/pour_toi_controller')
 router.get('/', [HomeController, 'index']).as('home')
 router.get('/decouverte', [SwipeController, 'index']).as('Swipe')
 router.get('/pour-toi', [PourToiController, 'index']).as('PourToi')
+
+const RestaurantsController = () => import('#controllers/restaurants_controller')
+router.resource('restaurants', RestaurantsController)

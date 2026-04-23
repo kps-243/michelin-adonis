@@ -12,6 +12,13 @@ export type ScannedRoutes = {
     'home': { paramsTuple?: []; params?: {} }
     'Swipe': { paramsTuple?: []; params?: {} }
     'PourToi': { paramsTuple?: []; params?: {} }
+    'restaurants.index': { paramsTuple?: []; params?: {} }
+    'restaurants.create': { paramsTuple?: []; params?: {} }
+    'restaurants.store': { paramsTuple?: []; params?: {} }
+    'restaurants.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'restaurants.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'restaurants.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'restaurants.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   GET: {
     'new_account.create': { paramsTuple?: []; params?: {} }
@@ -19,6 +26,10 @@ export type ScannedRoutes = {
     'home': { paramsTuple?: []; params?: {} }
     'Swipe': { paramsTuple?: []; params?: {} }
     'PourToi': { paramsTuple?: []; params?: {} }
+    'restaurants.index': { paramsTuple?: []; params?: {} }
+    'restaurants.create': { paramsTuple?: []; params?: {} }
+    'restaurants.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'restaurants.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   HEAD: {
     'new_account.create': { paramsTuple?: []; params?: {} }
@@ -26,11 +37,25 @@ export type ScannedRoutes = {
     'home': { paramsTuple?: []; params?: {} }
     'Swipe': { paramsTuple?: []; params?: {} }
     'PourToi': { paramsTuple?: []; params?: {} }
+    'restaurants.index': { paramsTuple?: []; params?: {} }
+    'restaurants.create': { paramsTuple?: []; params?: {} }
+    'restaurants.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'restaurants.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   POST: {
     'new_account.store': { paramsTuple?: []; params?: {} }
     'session.store': { paramsTuple?: []; params?: {} }
     'session.destroy': { paramsTuple?: []; params?: {} }
+    'restaurants.store': { paramsTuple?: []; params?: {} }
+  }
+  PUT: {
+    'restaurants.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+  }
+  PATCH: {
+    'restaurants.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+  }
+  DELETE: {
+    'restaurants.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
 }
 declare module '@adonisjs/core/types/http' {

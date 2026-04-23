@@ -48,7 +48,7 @@ export class ImageSchema extends BaseModel {
 }
 
 export class RestaurantSchema extends BaseModel {
-  static $columns = ['city', 'codePostal', 'country', 'createdAt', 'cuisine', 'id', 'lat', 'lng', 'maxPrice', 'michelinStar', 'postcode', 'street', 'updatedAt'] as const
+  static $columns = ['city', 'codePostal', 'country', 'createdAt', 'cuisine', 'id', 'lat', 'lng', 'maxPrice', 'michelinStar', 'name', 'postcode', 'street', 'updatedAt'] as const
   $columns = RestaurantSchema.$columns
   @column()
   declare city: string | null
@@ -70,6 +70,8 @@ export class RestaurantSchema extends BaseModel {
   declare maxPrice: string | null
   @column()
   declare michelinStar: any | null
+  @column()
+  declare name: string
   @column()
   declare postcode: string | null
   @column()
@@ -96,10 +98,12 @@ export class SwipedRestaurantSchema extends BaseModel {
 }
 
 export class UserSchema extends BaseModel {
-  static $columns = ['createdAt', 'firstName', 'id', 'lastName', 'password', 'updatedAt', 'username'] as const
+  static $columns = ['createdAt', 'email', 'firstName', 'id', 'lastName', 'password', 'updatedAt', 'username'] as const
   $columns = UserSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
+  @column()
+  declare email: string
   @column()
   declare firstName: string | null
   @column({ isPrimary: true })
