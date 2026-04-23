@@ -390,8 +390,6 @@ export default function Swipe({ cards: initialCards }: Props) {
       >
         ❤ {liked.length} table{liked.length > 1 ? 's' : ''} sauvegardée{liked.length > 1 ? 's' : ''}
       </div>
-
-      <BottomNav active="swipe" dark />
     </div>
   )
 }
