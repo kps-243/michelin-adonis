@@ -1,117 +1,89 @@
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
 import Restaurant from '#models/restaurant'
+import Image from '#models/image'
+import HoursOfOperation from '#models/hours_of_operation'
+import fs from 'node:fs'
+import readline from 'node:readline'
+import path from 'node:path'
 
 export default class RestaurantSeeder extends BaseSeeder {
   async run() {
-    const restaurants = [
-      {
-        name: 'Le Cinq',
-        michelinStar: 'THREE',
-        street: '31 Avenue George V',
-        postcode: '75008',
-        city: 'Paris',
-        country: 'France',
-        codePostal: 75008,
-        maxPrice: 380,
-        cuisine: 'Française',
-        lat: 48.8697,
-        lng: 2.3017,
-      },
-      {
-        name: 'L\'Arpège',
-        michelinStar: 'THREE',
-        street: '84 Rue de Varenne',
-        postcode: '75007',
-        city: 'Paris',
-        country: 'France',
-        codePostal: 75007,
-        maxPrice: 340,
-        cuisine: 'Végétarienne',
-        lat: 48.8554,
-        lng: 2.3163,
-      },
-      {
-        name: 'Septime',
-        michelinStar: 'ONE',
-        street: '80 Rue de Charonne',
-        postcode: '75011',
-        city: 'Paris',
-        country: 'France',
-        codePostal: 75011,
-        maxPrice: 120,
-        cuisine: 'Bistrot moderne',
-        lat: 48.8528,
-        lng: 2.3807,
-      },
-      {
-        name: 'Paul Bocuse',
-        michelinStar: 'THREE',
-        street: '40 Rue de la Plage',
-        postcode: '69660',
-        city: 'Collonges-au-Mont-d\'Or',
-        country: 'France',
-        codePostal: 69660,
-        maxPrice: 250,
-        cuisine: 'Lyonnaise',
-        lat: 45.8303,
-        lng: 4.8427,
-      },
-      {
-        name: 'Maison Lameloise',
-        michelinStar: 'THREE',
-        street: '36 Place d\'Armes',
-        postcode: '71150',
-        city: 'Chagny',
-        country: 'France',
-        codePostal: 71150,
-        maxPrice: 220,
-        cuisine: 'Bourguignonne',
-        lat: 46.9077,
-        lng: 4.7488,
-      },
-      {
-        name: 'Le Bernardin',
-        michelinStar: 'TWO',
-        street: '155 West 51st Street',
-        postcode: '10019',
-        city: 'New York',
-        country: 'USA',
-        codePostal: 10019,
-        maxPrice: 290,
-        cuisine: 'Fruits de mer',
-        lat: 40.7617,
-        lng: -73.9828,
-      },
-      {
-        name: 'Bras',
-        michelinStar: 'TWO',
-        street: 'Route de l\'Aubrac',
-        postcode: '12210',
-        city: 'Laguiole',
-        country: 'France',
-        codePostal: 12210,
-        maxPrice: 180,
-        cuisine: 'Terroir',
-        lat: 44.6833,
-        lng: 2.8500,
-      },
-      {
-        name: 'Frenchie',
-        michelinStar: null,
-        street: '5 Rue du Nil',
-        postcode: '75002',
-        city: 'Paris',
-        country: 'France',
-        codePostal: 75002,
-        maxPrice: 95,
-        cuisine: 'Bistrot',
-        lat: 48.8634,
-        lng: 2.3480,
-      },
-    ] as const
-
-    for (const restaurant of restaurants) {
-      await Restaurant.updateOrCreate({ name: restaurant.name }, restaurant)
+    const filePath = path.join(process.cwd(), 'data/all_restaurants.jsonl')
+    
+    if (!fs.existsSync(filePath)) {
+      console.warn(`Fichier non trouvé : ${filePath}`)
+      return
     }
+
+    const fileStream = fs.createReadStream(filePath)
+    const rl = readline.createInterface({
+      input: fileStream,
+      crlfDelay: Number.POSITIVE_INFINITY,
+    })
+
+    console.log('Début de l\'importation des restaurants depuis all_restaurants.jsonl...')
+
+    for await (const line of rl) {
+      if (!line.trim()) continue
+
+      try {
+        const data = JSON.parse(line)
+
+        // 1. Création du restaurant
+        const restaurant = await Restaurant.create({
+          name: data.name,
+          michelinStar: data.michelin_star || null,
+          street: data.street || null,
+          postcode: data.postcode || null,
+          city: data.city?.name || null,
+          country: data.country?.name || null,
+          cuisine: data.cuisines?.[0]?.label || null,
+          lat: data._geoloc?.lat?.toString() || null,
+          lng: data._geoloc?.lng?.toString() || null,
+          maxPrice: data.price?.high?.toString() || null,
+        })
+
+        // 2. Ajout des images
+        if (data.images && Array.isArray(data.images)) {
+          const imagesData = data.images.map((img: any) => ({
+            restaurantId: restaurant.id,
+            url: img.url,
+            copyright: img.copyright || null,
+            topic: img.topic || null,
+          }))
+          await Image.createMany(imagesData)
+        }
+
+        // 3. Ajout des horaires
+        if (data.hours_of_operation) {
+          const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+          const hoursData: any[] = []
+
+          days.forEach((dayName, index) => {
+            const dayData = data.hours_of_operation[dayName]
+            if (dayData && Array.isArray(dayData)) {
+              dayData.forEach((slot: any) => {
+                hoursData.push({
+                  restaurantId: restaurant.id,
+                  day: index,
+                  opens: slot.opens?.replace('T', '') || null,
+                  closes: slot.closes?.replace('T', '') || null,
+                  closed: slot.closed || false,
+                })
+              })
+            }
+          })
+
+          if (hoursData.length > 0) {
+            await HoursOfOperation.createMany(hoursData)
+          }
+        }
+      } catch (error) {
+        console.error(`Erreur sur une ligne :`, error)
+      }
+    }
+
+    console.log('Importation des restaurants terminée !')
   }
 }
+
