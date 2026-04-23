@@ -50,7 +50,7 @@ export default function Home({ featured, stats }: Props) {
             🌟
           </div>
           <div>
-            <span className="font-bebas text-[22px] tracking-widest text-[#1A1A1A]">MICHELIN</span>
+            <span className="font-bebas text-[22px] tracking-widest text-[#1A1A1A]">MORGAN</span>
             <span className="block text-[9px] tracking-[0.2em] text-gray-500 uppercase -mt-1">
               Guide · Nouvelle Génération
             </span>
