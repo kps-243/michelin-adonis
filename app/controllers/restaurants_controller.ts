@@ -1,5 +1,7 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Restaurant from '#models/restaurant'
+import RestaurantFavorite from '#models/restaurant_favorite'
+import RestaurantVisit from '#models/restaurant_visit'
 
 const CUISINE_IMAGES: Record<string, string> = {
   french: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80',
@@ -49,7 +51,7 @@ function buildGallery(r: Restaurant, dbImages: string[]): string[] {
   return [...base, ...supplements].slice(0, 6)
 }
 
-function toPlain(r: Restaurant) {
+function toPlain(r: Restaurant, favIds: Set<number> = new Set()) {
   const imageUrl = (r.images ?? []).length > 0 ? r.images[0].url : getCuisineImage(r.cuisine)
   return {
     id: r.id,
@@ -64,10 +66,11 @@ function toPlain(r: Restaurant) {
     lat: r.lat,
     lng: r.lng,
     image: imageUrl,
+    isFavorited: favIds.has(r.id),
   }
 }
 
-function toPlainDetail(r: Restaurant) {
+function toPlainDetail(r: Restaurant, isFavorited: boolean, isVisited: boolean) {
   const dbImages = (r.images ?? []).map((img) => img.url)
   const gallery = buildGallery(r, dbImages)
   return {
@@ -84,6 +87,8 @@ function toPlainDetail(r: Restaurant) {
     lng: r.lng,
     image: gallery[0],
     gallery,
+    isFavorited,
+    isVisited,
   }
 }
 
@@ -92,16 +97,49 @@ const render = (inertia: HttpContext['inertia'], page: string, props: Record<str
   (inertia as any).render(page, props)
 
 export default class RestaurantsController {
-  async index({ inertia }: HttpContext) {
+  async index({ inertia, auth }: HttpContext) {
     const restaurants = await Restaurant.query().preload('images').orderBy('name', 'asc')
-    return render(inertia, 'restaurants/index', { restaurants: restaurants.map(toPlain) })
+
+    let favIds = new Set<number>()
+    try {
+      await auth.check()
+      if (auth.user) {
+        const favs = await RestaurantFavorite.query().where('user_id', auth.user.id).select('restaurant_id')
+        favIds = new Set(favs.map((f) => f.restaurantId))
+      }
+    } catch {}
+
+    return render(inertia, 'restaurants/index', { restaurants: restaurants.map((r) => toPlain(r, favIds)) })
   }
 
-  async show({ params, inertia }: HttpContext) {
+  async show({ params, inertia, auth }: HttpContext) {
     const restaurant = await Restaurant.query()
       .preload('images')
       .where('id', params.id)
       .firstOrFail()
-    return render(inertia, 'restaurants/single', { restaurant: toPlainDetail(restaurant) })
+
+    let isFavorited = false
+    let isVisited = false
+    try {
+      await auth.check()
+      if (auth.user) {
+        const [fav, visit] = await Promise.all([
+          RestaurantFavorite.query()
+            .where('user_id', auth.user.id)
+            .where('restaurant_id', restaurant.id)
+            .first(),
+          RestaurantVisit.query()
+            .where('user_id', auth.user.id)
+            .where('restaurant_id', restaurant.id)
+            .first(),
+        ])
+        isFavorited = !!fav
+        isVisited = !!visit
+      }
+    } catch {}
+
+    return render(inertia, 'restaurants/single', {
+      restaurant: toPlainDetail(restaurant, isFavorited, isVisited),
+    })
   }
 }

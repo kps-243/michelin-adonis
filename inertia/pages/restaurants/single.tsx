@@ -1,4 +1,6 @@
 import { Link } from '@inertiajs/react'
+import { useState } from 'react'
+import { csrfPost } from '~/utils/api'
 
 interface Restaurant {
   id: number
@@ -14,61 +16,42 @@ interface Restaurant {
   lng: number | null
   image: string
   gallery: string[]
+  isFavorited: boolean
+  isVisited: boolean
 }
 
 interface Props {
   restaurant: Restaurant
 }
 
-const ACTIONS = [
-  {
-    key: 'notes',
-    label: 'Mes notes',
-    active: false,
-    icon: (
-      <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
-        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-      </svg>
-    ),
-  },
-  {
-    key: 'visite',
-    label: 'Déjà visité',
-    active: true,
-    icon: (
-      <div className="w-6 h-6 rounded-full bg-red-primary flex items-center justify-center">
-        <svg width="13" height="13" fill="none" stroke="white" strokeWidth="2.5" viewBox="0 0 24 24">
-          <polyline points="20 6 9 17 4 12" />
-        </svg>
-      </div>
-    ),
-  },
-  {
-    key: 'enregistrer',
-    label: 'Enregistrer',
-    active: false,
-    icon: (
-      <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
-        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
-      </svg>
-    ),
-  },
-  {
-    key: 'favori',
-    label: 'Favori',
-    active: false,
-    icon: (
-      <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
-        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-      </svg>
-    ),
-  },
-]
+async function toggle(url: string): Promise<boolean | null> {
+  try {
+    const data = await csrfPost<{ favorited?: boolean; visited?: boolean }>(url)
+    return data.favorited ?? data.visited ?? null
+  } catch {
+    return null
+  }
+}
 
 export default function RestaurantSingle({ restaurant: r }: Props) {
+  const [favorited, setFavorited] = useState(r.isFavorited)
+  const [visited, setVisited] = useState(r.isVisited)
+
   const address = [r.street, r.city, r.postcode, r.country].filter(Boolean).join(', ')
   const gallery = r.gallery ?? [r.image]
   const primaryCuisine = r.cuisine?.split(',')[0].trim() ?? ''
+
+  const handleFavorite = async (e: React.MouseEvent) => {
+    e.preventDefault()
+    const result = await toggle(`/restaurants/${r.id}/favorite`)
+    if (result !== null) setFavorited(result)
+  }
+
+  const handleVisit = async (e: React.MouseEvent) => {
+    e.preventDefault()
+    const result = await toggle(`/restaurants/${r.id}/visit`)
+    if (result !== null) setVisited(result)
+  }
 
   return (
     <div className="min-h-screen bg-white pb-24">
@@ -92,7 +75,7 @@ export default function RestaurantSingle({ restaurant: r }: Props) {
           </svg>
         </Link>
 
-        {/* Nom + adresse + prix sur l'image */}
+        {/* Nom + adresse + prix */}
         <div className="absolute bottom-0 left-0 right-0 px-5 pb-5 lg:px-8 lg:pb-8 lg:max-w-4xl">
           <h1 className="font-title text-[26px] lg:text-[38px] font-semibold text-white leading-tight mb-1">
             {r.name}
@@ -113,24 +96,59 @@ export default function RestaurantSingle({ restaurant: r }: Props) {
 
         {/* ── ACTIONS ── */}
         <div className="px-4 pt-8 pb-2 grid grid-cols-4 gap-2.5 lg:px-8 lg:gap-4">
-          {ACTIONS.map((action) => (
-            <button
-              key={action.key}
-              className={[
-                'flex flex-col items-center gap-2 py-3 lg:py-4 rounded-2xl border transition-colors',
-                action.active
-                  ? 'border-gray-200 bg-white text-gray-900'
-                  : 'border-gray-100 bg-white text-gray-400',
-              ].join(' ')}
-            >
-              <span className={action.active ? 'text-gray-900' : 'text-gray-400'}>
-                {action.icon}
-              </span>
-              <span className={`text-[10px] lg:text-[11px] leading-tight text-center font-medium ${action.active ? 'text-gray-900' : 'text-gray-400'}`}>
-                {action.label}
-              </span>
-            </button>
-          ))}
+
+          {/* Favori */}
+          <button
+            onClick={handleFavorite}
+            className={[
+              'flex flex-col items-center gap-2 py-3 lg:py-4 rounded-2xl border transition-colors',
+              favorited ? 'border-red-200 bg-red-50 text-red-primary' : 'border-gray-100 bg-white text-gray-400',
+            ].join(' ')}
+          >
+            <svg width="22" height="22" fill={favorited ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+            </svg>
+            <span className="text-[10px] lg:text-[11px] leading-tight text-center font-medium">Favori</span>
+          </button>
+
+          {/* Déjà visité */}
+          <button
+            onClick={handleVisit}
+            className={[
+              'flex flex-col items-center gap-2 py-3 lg:py-4 rounded-2xl border transition-colors',
+              visited ? 'border-gray-200 bg-white text-gray-900' : 'border-gray-100 bg-white text-gray-400',
+            ].join(' ')}
+          >
+            <div className={`w-6 h-6 rounded-full flex items-center justify-center ${visited ? 'bg-red-primary' : 'bg-gray-200'}`}>
+              <svg width="13" height="13" fill="none" stroke="white" strokeWidth="2.5" viewBox="0 0 24 24">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            </div>
+            <span className={`text-[10px] lg:text-[11px] leading-tight text-center font-medium ${visited ? 'text-gray-900' : 'text-gray-400'}`}>
+              Déjà visité
+            </span>
+          </button>
+
+          {/* Enregistrer */}
+          <button
+            className="flex flex-col items-center gap-2 py-3 lg:py-4 rounded-2xl border border-gray-100 bg-white text-gray-400 transition-colors"
+          >
+            <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+            </svg>
+            <span className="text-[10px] lg:text-[11px] leading-tight text-center font-medium">Enregistrer</span>
+          </button>
+
+          {/* Mes notes */}
+          <button
+            className="flex flex-col items-center gap-2 py-3 lg:py-4 rounded-2xl border border-gray-100 bg-white text-gray-400 transition-colors"
+          >
+            <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+            </svg>
+            <span className="text-[10px] lg:text-[11px] leading-tight text-center font-medium">Mes notes</span>
+          </button>
         </div>
 
         {/* ── GALERIE BERSHKA-STYLE ── */}
@@ -175,7 +193,7 @@ export default function RestaurantSingle({ restaurant: r }: Props) {
             </div>
             {r.lat && r.lng && (
               <div>
-                <p className="text-[14px] font-medium text-gray-800 mb-1 mt-4 lg:mt-0">Téléphone</p>
+                <p className="text-[14px] font-medium text-gray-800 mb-1 mt-4 lg:mt-0">Localisation</p>
                 <a
                   href={`https://maps.google.com/?q=${r.lat},${r.lng}`}
                   target="_blank"
@@ -190,7 +208,7 @@ export default function RestaurantSingle({ restaurant: r }: Props) {
 
           {/* Localisation */}
           <div className="border-t border-gray-100 pt-5 pb-4">
-            <p className="text-[14px] font-medium text-gray-800 mb-2">Localisation</p>
+            <p className="text-[14px] font-medium text-gray-800 mb-2">Adresse</p>
             {address && (
               <p className="text-[13px] text-gray-500 leading-relaxed">{address}</p>
             )}

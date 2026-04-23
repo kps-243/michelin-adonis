@@ -47,6 +47,32 @@ export class ImageSchema extends BaseModel {
   declare url: string
 }
 
+export class RestaurantFavoriteSchema extends BaseModel {
+  static $columns = ['createdAt', 'id', 'restaurantId', 'userId'] as const
+  $columns = RestaurantFavoriteSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare restaurantId: number
+  @column()
+  declare userId: number
+}
+
+export class RestaurantVisitSchema extends BaseModel {
+  static $columns = ['createdAt', 'id', 'restaurantId', 'userId'] as const
+  $columns = RestaurantVisitSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare restaurantId: number
+  @column()
+  declare userId: number
+}
+
 export class RestaurantSchema extends BaseModel {
   static $columns = ['city', 'codePostal', 'country', 'createdAt', 'cuisine', 'id', 'lat', 'lng', 'maxPrice', 'michelinStar', 'name', 'postcode', 'street', 'updatedAt'] as const
   $columns = RestaurantSchema.$columns
@@ -95,6 +121,19 @@ export class SwipedRestaurantSchema extends BaseModel {
   declare updatedAt: DateTime
   @column()
   declare userId: number | null
+}
+
+export class UserFollowSchema extends BaseModel {
+  static $columns = ['createdAt', 'followedId', 'followerId', 'id'] as const
+  $columns = UserFollowSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare followedId: number
+  @column()
+  declare followerId: number
+  @column({ isPrimary: true })
+  declare id: number
 }
 
 export class UserSchema extends BaseModel {

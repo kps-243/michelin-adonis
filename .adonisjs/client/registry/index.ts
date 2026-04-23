@@ -144,6 +144,24 @@ const routes = {
     tokens: [{"old":"/profile","type":0,"val":"profile","end":""}],
     types: placeholder as Registry['profile.update']['types'],
   },
+  'users.follow': {
+    methods: ["POST"],
+    pattern: '/users/:id/follow',
+    tokens: [{"old":"/users/:id/follow","type":0,"val":"users","end":""},{"old":"/users/:id/follow","type":1,"val":"id","end":""},{"old":"/users/:id/follow","type":0,"val":"follow","end":""}],
+    types: placeholder as Registry['users.follow']['types'],
+  },
+  'restaurants.favorite': {
+    methods: ["POST"],
+    pattern: '/restaurants/:id/favorite',
+    tokens: [{"old":"/restaurants/:id/favorite","type":0,"val":"restaurants","end":""},{"old":"/restaurants/:id/favorite","type":1,"val":"id","end":""},{"old":"/restaurants/:id/favorite","type":0,"val":"favorite","end":""}],
+    types: placeholder as Registry['restaurants.favorite']['types'],
+  },
+  'restaurants.visit': {
+    methods: ["POST"],
+    pattern: '/restaurants/:id/visit',
+    tokens: [{"old":"/restaurants/:id/visit","type":0,"val":"restaurants","end":""},{"old":"/restaurants/:id/visit","type":1,"val":"id","end":""},{"old":"/restaurants/:id/visit","type":0,"val":"visit","end":""}],
+    types: placeholder as Registry['restaurants.visit']['types'],
+  },
 } as const satisfies Record<string, AdonisEndpoint>
 
 export { routes }

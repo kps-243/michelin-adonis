@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import SecondaryTitle from '~/components/SecondaryTitle'
 import VlogModal, { type Vlog } from '~/components/VlogModal'
+import { csrfPost } from '~/utils/api'
 
 interface User {
   id: number
@@ -16,6 +17,7 @@ interface User {
 
 interface Props {
   user: User
+  isFollowing?: boolean
 }
 
 const VLOG_THUMBNAILS = [
@@ -48,9 +50,9 @@ function buildVlogs(user: User): Vlog[] {
   }))
 }
 
-export default function InfluencerProfile({ user }: Props) {
+export default function InfluencerProfile({ user, isFollowing = false }: Props) {
   const [selectedVlog, setSelectedVlog] = useState<Vlog | null>(null)
-  const [following, setFollowing] = useState(false)
+  const [following, setFollowing] = useState(isFollowing)
 
   const displayName = [user.firstName, user.lastName].filter(Boolean).join(' ') || user.username
   const vlogs = buildVlogs(user)
@@ -58,80 +60,109 @@ export default function InfluencerProfile({ user }: Props) {
   return (
     <div className="min-h-screen bg-white pb-24">
 
-      {/* Profile card */}
-      <div className="bg-white rounded-b-3xl shadow-sm px-6 pt-6 pb-8">
-        <div className="flex flex-col items-center">
+      {/* ── DESKTOP WRAPPER ── */}
+      <div className="lg:max-w-4xl lg:mx-auto">
+
+        {/* Profile card */}
+        <div className="bg-white shadow-sm px-6 pt-6 pb-8 lg:rounded-2xl lg:mt-8 lg:shadow-md lg:flex lg:items-center lg:gap-8 lg:px-10 lg:py-10">
 
           {/* Avatar */}
-          <div className="w-32 h-32 rounded-full overflow-hidden bg-gray-200 mb-4 shadow-md">
-            {user.avatar ? (
-              <img src={user.avatar} alt={displayName} className="w-full h-full object-cover" />
-            ) : (
-              <div className="w-full h-full bg-gray-300 flex items-center justify-center">
-                <span className="text-3xl font-semibold text-gray-500">{user.initials}</span>
-              </div>
-            )}
-          </div>
-
-          {/* Name + verified */}
-          <div className="flex items-center gap-2 mb-3">
-            <p className="font-title text-[20px] font-semibold text-gray-900">{displayName}</p>
-            <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center">
-              <svg width="9" height="9" fill="none" stroke="white" strokeWidth="3" viewBox="0 0 24 24">
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
+          <div className="flex flex-col items-center lg:items-start lg:shrink-0">
+            <div className="w-32 h-32 rounded-full overflow-hidden bg-gray-200 mb-4 shadow-md lg:w-40 lg:h-40 lg:mb-0">
+              {user.avatar ? (
+                <img src={user.avatar} alt={displayName} className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full bg-gray-300 flex items-center justify-center">
+                  <span className="text-3xl font-semibold text-gray-500 lg:text-4xl">{user.initials}</span>
+                </div>
+              )}
             </div>
           </div>
 
-          {/* Follow button */}
-          <button
-            onClick={() => setFollowing(!following)}
-            className={`px-8 py-2 rounded-full text-[13px] font-semibold transition-colors ${
-              following
-                ? 'bg-gray-100 text-gray-700 border border-gray-200'
-                : 'bg-red-primary text-white'
-            }`}
-          >
-            {following ? 'Suivi ✓' : 'Suivre'}
-          </button>
-        </div>
-      </div>
-
-      {/* Bio */}
-      <section className="px-5 pt-6 pb-2">
-        <SecondaryTitle hidden>A propos de moi :</SecondaryTitle>
-        <p className="text-[14px] text-gray-700 leading-relaxed mt-2">
-          {user.bio || 'Créateur de contenu passionné par les voyages et la gastronomie, je partage des restaurants, des lieux inspirants et des expériences authentiques.'}
-        </p>
-      </section>
-
-      {/* Vlogs grid */}
-      <section className="px-5 pt-5">
-        <SecondaryTitle hidden>Mes vlogs :</SecondaryTitle>
-        <div className="grid grid-cols-2 gap-2 mt-3 lg:grid-cols-3">
-          {vlogs.map((vlog) => (
-            <button
-              key={vlog.id}
-              className="relative aspect-square rounded-xl overflow-hidden group"
-              onClick={() => setSelectedVlog(vlog)}
-            >
-              <img
-                src={vlog.thumbnail}
-                alt={vlog.title}
-                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-black/20" />
-              {/* Play icon */}
-              <div className="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-white/80 flex items-center justify-center">
-                <svg width="12" height="12" fill="#111" viewBox="0 0 24 24">
-                  <polygon points="5,3 19,12 5,21" />
+          {/* Name + bio + follow — stacked on mobile, side by side on desktop */}
+          <div className="flex flex-col items-center lg:items-start lg:flex-1">
+            <div className="flex items-center gap-2 mb-3">
+              <p className="font-title text-[20px] lg:text-[28px] font-semibold text-gray-900">{displayName}</p>
+              <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center shrink-0">
+                <svg width="9" height="9" fill="none" stroke="white" strokeWidth="3" viewBox="0 0 24 24">
+                  <polyline points="20 6 9 17 4 12" />
                 </svg>
               </div>
+            </div>
+
+            {user.bio && (
+              <p className="text-[13px] text-gray-500 leading-relaxed mb-4 text-center lg:text-left lg:max-w-md">
+                {user.bio}
+              </p>
+            )}
+
+            <button
+              onClick={async () => {
+                try {
+                  const data = await csrfPost<{ following: boolean }>(`/users/${user.id}/follow`)
+                  setFollowing(data.following)
+                } catch {
+                  setFollowing((f) => !f)
+                }
+              }}
+              className={`px-8 py-2 rounded-full text-[13px] font-semibold transition-colors ${
+                following
+                  ? 'bg-gray-100 text-gray-700 border border-gray-200'
+                  : 'bg-red-primary text-white'
+              }`}
+            >
+              {following ? 'Suivi ✓' : 'Suivre'}
             </button>
-          ))}
+          </div>
         </div>
-      </section>
+
+        {/* Bio (mobile only — desktop bio is in card) */}
+        {!user.bio && (
+          <section className="px-5 pt-6 pb-2 lg:px-0 lg:pt-6">
+            <SecondaryTitle hidden>A propos de moi :</SecondaryTitle>
+            <p className="text-[14px] text-gray-700 leading-relaxed mt-2">
+              Créateur de contenu passionné par les voyages et la gastronomie, je partage des restaurants, des lieux inspirants et des expériences authentiques.
+            </p>
+          </section>
+        )}
+        {user.bio && (
+          <section className="px-5 pt-6 pb-2 lg:hidden">
+            <SecondaryTitle hidden>A propos de moi :</SecondaryTitle>
+            <p className="text-[14px] text-gray-700 leading-relaxed mt-2">{user.bio}</p>
+          </section>
+        )}
+
+        {/* Vlogs grid */}
+        <section className="px-5 pt-5 lg:px-0 lg:pt-6">
+          <SecondaryTitle hidden>Mes vlogs :</SecondaryTitle>
+          <div className="grid grid-cols-2 gap-2 mt-3 lg:grid-cols-3 lg:gap-3">
+            {vlogs.map((vlog) => (
+              <button
+                key={vlog.id}
+                className="relative aspect-square rounded-xl overflow-hidden group"
+                onClick={() => setSelectedVlog(vlog)}
+              >
+                <img
+                  src={vlog.thumbnail}
+                  alt={vlog.title}
+                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-black/20" />
+                <div className="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-white/80 flex items-center justify-center">
+                  <svg width="12" height="12" fill="#111" viewBox="0 0 24 24">
+                    <polygon points="5,3 19,12 5,21" />
+                  </svg>
+                </div>
+                <p className="absolute bottom-2.5 left-2.5 right-2.5 text-white text-[10px] font-bold uppercase tracking-wide truncate">
+                  {vlog.badge}
+                </p>
+              </button>
+            ))}
+          </div>
+        </section>
+
+      </div>
 
       {/* Vlog popup */}
       <VlogModal vlog={selectedVlog} onClose={() => setSelectedVlog(null)} />
