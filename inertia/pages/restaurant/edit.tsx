@@ -1,6 +1,6 @@
 import { useForm } from '@inertiajs/react'
 import { Link } from '@inertiajs/react'
-import BottomNav from '../../components/BottomNav'
+import BottomNav from '../../components/NavBar'
 
 interface Restaurant {
   id: number

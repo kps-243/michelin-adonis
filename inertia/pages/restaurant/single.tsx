@@ -1,5 +1,5 @@
 import { Link, router } from '@inertiajs/react'
-import BottomNav from '../../components/BottomNav'
+import BottomNav from '../../components/NavBar'
 
 interface Restaurant {
   id: number
