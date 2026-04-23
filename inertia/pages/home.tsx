@@ -1,8 +1,4 @@
-import { useState } from 'react'
-import { Link } from '@inertiajs/react'
-import RestaurantCard from '../components/RestaurantCard'
 import type { Restaurant } from '../../app/services/restaurant_service'
-import PrimaryTitle from '~/components/PrimaryTitle'
 import SecondaryTitle from '~/components/SecondaryTitle'
 import { router } from '@inertiajs/react'
 import SearchBar from '../components/SearchBar'
@@ -23,177 +19,99 @@ interface Props {
   }
 }
 
-const bibImages = [
-  'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=200&q=80',
-  'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=200&q=80',
-  'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=200&q=80',
-  'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=200&q=80',
-  'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=200&q=80',
-  'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&q=80',
+const ARTICLES = [
+  {
+    id: 1,
+    title: 'Tour du monde des restaurants les plus étoilés',
+    img: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=900&q=80',
+    full: true,
+  },
+  {
+    id: 2,
+    title: 'La liste complète des restaurants étoilés au monde',
+    img: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=900&q=80',
+    full: true,
+  },
+  {
+    id: 3,
+    title: "Pourquoi l'Allemagne voue un culte aux restaurants gastronomiques",
+    img: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&q=80',
+    full: false,
+  },
+  {
+    id: 4,
+    title: 'Tout sur la pomme : recettes et adresses incontournables',
+    img: 'https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=600&q=80',
+    full: false,
+  },
+  {
+    id: 5,
+    title: 'Le végétal, star des menus de printemps',
+    img: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=900&q=80',
+    full: true,
+  },
+  {
+    id: 6,
+    title: '8 plages cachées en France et les tables qui les entourent',
+    img: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=80',
+    full: false,
+  },
+  {
+    id: 7,
+    title: 'Les adresses pour redécouvrir les saveurs du Maghreb',
+    img: 'https://images.unsplash.com/photo-1547592180-85f173990554?w=600&q=80',
+    full: false,
+  },
 ]
 
-export default function Home({ featured, stats }: Props) {
-  const [activeFilter, setActiveFilter] = useState('all')
+// Desktop: index 0 → hero 2-col, index 1 → tall side, rest → equal
+function articleDesktopCls(i: number) {
+  if (i === 0) return 'lg:col-span-2 lg:h-[440px]'
+  if (i === 1) return 'lg:col-span-1 lg:h-[440px]'
+  return 'lg:col-span-1 lg:h-64'
+}
 
-  const filters = [
-    { key: 'all', label: 'Tous' },
-    { key: '3', label: '⭐⭐⭐ 3 Étoiles' },
-    { key: '2', label: '⭐⭐ 2 Étoiles' },
-    { key: '1', label: '⭐ 1 Étoile' },
-    { key: 'bib', label: '🍽 Bib Gourmand' },
-    { key: 'green', label: '🌿 Green Star' },
-  ]
-
+export default function Home({ featured }: Props) {
   return (
-    <div className="min-h-screen bg-[#FAF8F4] text-[#1A1A1A] pb-20 overflow-x-hidden">
-      {/* ── HEADER ── */}
-      <header className="sticky top-0 z-40 bg-[#FAF8F4] border-b border-gray-100 px-5 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
-          <div className="w-9.5 h-9.5 bg-[#E4002B] rounded-full flex items-center justify-center text-xl">
-            🌟
-          </div>
-          <div>
-            <PrimaryTitle children="Michelin"/>
-            <SecondaryTitle hidden={true} children="Yes"/>
-          </div>
-        </div>
-        <button className="w-10 h-10 rounded-full border-[1.5px] border-gray-200 flex items-center justify-center text-base hover:border-[#E4002B] transition-colors">
-          🔍
-        </button>
-      </header>
-
-      {/* ── HERO ── */}
-      <section className="bg-[#1A1A1A] text-white px-5 py-10 relative overflow-hidden fade-up">
-        <div className="absolute -top-16 -right-16 w-60 h-60 bg-[#E4002B] rounded-full opacity-10 pointer-events-none" />
-        <p className="text-[10px] tracking-[0.3em] uppercase text-[#C8A96E] mb-3">
-          ✦ L'excellence gastronomique
-        </p>
-        <h1 className="font-cormorant text-[clamp(38px,10vw,52px)] font-light leading-[1.05] mb-4">
-          Découvrez<br />
-          les tables{' '}
-          <em className="italic text-[#C8A96E]">d'exception</em>
-        </h1>
-        <p className="text-[13px] text-white/65 leading-relaxed max-w-xs mb-7">
-          Plus de 18 000 restaurants sélectionnés par nos inspecteurs à travers le monde entier.
-        </p>
-        <div className="flex gap-7">
-          <div>
-            <div className="font-bebas text-3xl text-[#C8A96E] leading-none">
-              {stats.total.toLocaleString('fr')}
-            </div>
-            <div className="text-[10px] text-white/50 uppercase tracking-wider">Restaurants</div>
-          </div>
-          <div>
-            <div className="font-bebas text-3xl text-[#C8A96E] leading-none">{stats.threeStars}</div>
-            <div className="text-[10px] text-white/50 uppercase tracking-wider">3 Étoiles</div>
-          </div>
-          <div>
-            <div className="font-bebas text-3xl text-[#C8A96E] leading-none">{stats.countries}</div>
-            <div className="text-[10px] text-white/50 uppercase tracking-wider">Pays</div>
-          </div>
-        </div>
-      </section>
-
+    <div className="min-h-screen pb-24 container mx-auto px-4 lg:px-0">
       {/* ── SEARCH ── */}
-      <div className="px-4 mt-4">
+      <div className="mt-4">
         <SearchBar
           placeholder="Destination ou nom de l'hôtel ..."
           onSearch={(q) => console.log('Recherche:', q)}
         />
       </div>
+      {/* ── A LA UNE ── */}
+      <section className="pt-6 pb-4 lg:px-8 lg:pt-8 lg:pb-6 lg:max-w-6xl lg:mx-auto">
+        <SecondaryTitle className="mb-4">A la Une</SecondaryTitle>
 
-      {/* ── FILTERS ── */}
-      <div className="flex gap-2 px-5 py-3 overflow-x-auto scrollbar-none">
-        {filters.map((f) => (
-          <button
-            key={f.key}
-            onClick={() => setActiveFilter(f.key)}
-            className={`whitespace-nowrap px-4 py-1.75 rounded-full text-xs font-medium border-[1.5px] transition-all tracking-tight ${
-              activeFilter === f.key
-                ? 'bg-[#1A1A1A] border-[#1A1A1A] text-white'
-                : 'bg-white border-gray-200 text-[#1A1A1A] hover:border-[#E4002B] hover:text-[#E4002B]'
-            }`}
-          >
-            {f.label}
-          </button>
-        ))}
-      </div>
-
-      {/* ── 3 STARS ── */}
-      <section className="px-5 pt-6 pb-2 fade-up">
-        <div className="flex items-baseline justify-between mb-4">
-          <h2 className="font-cormorant text-2xl font-semibold">⭐ Trois Étoiles</h2>
-          <a href="#" className="text-xs text-[#E4002B] tracking-wide">Voir tout →</a>
-        </div>
-        <div className="flex gap-3.5 overflow-x-auto scrollbar-none pb-1">
-          {featured.threeStars.map((r) => (
-            <RestaurantCard key={r.id} restaurant={r} />
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-3 lg:gap-4">
+          {ARTICLES.map((article, i) => (
+            <div
+              key={article.id}
+              className={[
+                'group relative overflow-hidden rounded-2xl cursor-pointer',
+                article.full ? 'col-span-2 h-52' : 'col-span-1 h-44',
+                articleDesktopCls(i),
+              ].join(' ')}
+            >
+              <img
+                src={article.img}
+                alt={article.title}
+                className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-linear-to-t from-black/65 via-black/10 to-transparent" />
+              <p className={[
+                'absolute bottom-0 left-0 right-0 px-3 pb-3 text-white font-medium leading-snug line-clamp-2',
+                i === 0 ? 'text-[16px] lg:text-[18px] lg:pb-5 lg:px-5' : 'text-[13px]',
+              ].join(' ')}>
+                {article.title}
+              </p>
+            </div>
           ))}
         </div>
       </section>
-
-      {/* ── INSPIRATION BAND ── */}
-      <div className="mx-5 my-6 bg-[#E4002B] text-white rounded-[20px] p-7 relative overflow-hidden">
-        <div className="absolute right-5 -bottom-2.5 text-[80px] opacity-[0.08] pointer-events-none">⭐</div>
-        <p className="text-[10px] tracking-[0.25em] uppercase text-white/70 mb-2">✦ Nouvelle fonctionnalité</p>
-        <h3 className="font-cormorant text-[26px] font-light leading-tight mb-4">
-          Swipez votre prochain<br />repas de rêve
-        </h3>
-        <Link
-          href="/decouverte"
-          className="inline-block bg-white text-[#E4002B] text-xs font-medium px-5 py-2.5 rounded-full tracking-wider"
-        >
-          Découvrir →
-        </Link>
-      </div>
-
-      {/* ── 2 STARS ── */}
-      <section className="px-5 pt-2 pb-2">
-        <div className="flex items-baseline justify-between mb-4">
-          <h2 className="font-cormorant text-2xl font-semibold">⭐ Deux Étoiles</h2>
-          <a href="#" className="text-xs text-[#E4002B] tracking-wide">Voir tout →</a>
-        </div>
-        <div className="flex gap-3.5 overflow-x-auto scrollbar-none pb-1">
-          {featured.twoStars.map((r) => (
-            <RestaurantCard key={r.id} restaurant={r} />
-          ))}
-        </div>
-      </section>
-
-      {/* ── BIB GOURMAND ── */}
-      <section className="px-5 pt-6 pb-2">
-        <div className="flex items-baseline justify-between mb-4">
-          <h2 className="font-cormorant text-2xl font-semibold">🍽 Bib Gourmand</h2>
-          <a href="#" className="text-xs text-[#E4002B] tracking-wide">Voir tout →</a>
-        </div>
-      </section>
-      <div className="flex flex-col gap-3 px-5 mb-4">
-        {featured.bibs.map((r, i) => (
-          <div
-            key={r.id}
-            className="bg-white rounded-2xl flex gap-3.5 p-3.5 items-center shadow-[0_1px_8px_rgba(0,0,0,0.06)] cursor-pointer transition-transform hover:translate-x-1"
-          >
-            <img
-              src={bibImages[i % bibImages.length]}
-              alt={r.name}
-              className="w-18 h-18 rounded-xl object-cover shrink-0 bg-gray-100"
-              loading="lazy"
-            />
-            <div className="flex-1 min-w-0">
-              <div className="inline-flex items-center gap-1 bg-orange-50 text-orange-700 text-[10px] font-medium px-2 py-0.5 rounded-full mb-1 tracking-wide">
-                🍽 Bib Gourmand
-              </div>
-              <div className="font-cormorant text-[15px] font-semibold truncate">{r.name}</div>
-              <div className="text-[11px] text-gray-500 mt-0.5">
-                {r.cuisine} · {r.location.split(',').slice(-1)[0].trim()}
-              </div>
-            </div>
-            <div className="font-cormorant text-base font-semibold text-[#E4002B] shrink-0 ml-auto">
-              {r.price}
-            </div>
-          </div>
-        ))}
-      </div>
     </div>
   )
 }
