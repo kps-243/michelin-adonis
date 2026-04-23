@@ -96,6 +96,24 @@ const routes = {
     tokens: [{"old":"/restaurants/:id","type":0,"val":"restaurants","end":""},{"old":"/restaurants/:id","type":1,"val":"id","end":""}],
     types: placeholder as Registry['restaurants.destroy']['types'],
   },
+  'profile.show': {
+    methods: ["GET","HEAD"],
+    pattern: '/profile',
+    tokens: [{"old":"/profile","type":0,"val":"profile","end":""}],
+    types: placeholder as Registry['profile.show']['types'],
+  },
+  'profile.edit': {
+    methods: ["GET","HEAD"],
+    pattern: '/profile/edit',
+    tokens: [{"old":"/profile/edit","type":0,"val":"profile","end":""},{"old":"/profile/edit","type":0,"val":"edit","end":""}],
+    types: placeholder as Registry['profile.edit']['types'],
+  },
+  'profile.update': {
+    methods: ["PUT"],
+    pattern: '/profile',
+    tokens: [{"old":"/profile","type":0,"val":"profile","end":""}],
+    types: placeholder as Registry['profile.update']['types'],
+  },
 } as const satisfies Record<string, AdonisEndpoint>
 
 export { routes }

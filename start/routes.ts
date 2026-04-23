@@ -39,3 +39,12 @@ router.get('/pour-toi', [PourToiController, 'index']).as('PourToi')
 
 const RestaurantsController = () => import('#controllers/restaurants_controller')
 router.resource('restaurants', RestaurantsController)
+
+const ProfileController = () => import('#controllers/profile_controller')
+router
+  .group(() => {
+    router.get('/profile', [ProfileController, 'show']).as('profile.show')
+    router.get('/profile/edit', [ProfileController, 'edit']).as('profile.edit')
+    router.put('/profile', [ProfileController, 'update']).as('profile.update')
+  })
+  .use(middleware.auth())

@@ -7,7 +7,8 @@ export const controllers = {
   Home: () => import('#controllers/home_controller'),
   NewAccount: () => import('#controllers/new_account_controller'),
   PourToi: () => import('#controllers/pour_toi_controller'),
-  Restaurants: () => import('#controllers/restaurants_controller'),
   Session: () => import('#controllers/session_controller'),
   Swipe: () => import('#controllers/swipe_controller'),
+  Restaurants: () => import('#controllers/restaurants_controller'),
+  Profile: () => import('#controllers/profile_controller'),
 }

@@ -98,8 +98,14 @@ export class SwipedRestaurantSchema extends BaseModel {
 }
 
 export class UserSchema extends BaseModel {
-  static $columns = ['createdAt', 'email', 'firstName', 'id', 'lastName', 'password', 'updatedAt', 'username'] as const
+  static $columns = ['avatar', 'bio', 'country', 'createdAt', 'email', 'firstName', 'id', 'lastName', 'password', 'role', 'updatedAt', 'username'] as const
   $columns = UserSchema.$columns
+  @column()
+  declare avatar: string | null
+  @column()
+  declare bio: string | null
+  @column()
+  declare country: string | null
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
   @column()
@@ -112,6 +118,8 @@ export class UserSchema extends BaseModel {
   declare lastName: string | null
   @column({ serializeAs: null })
   declare password: string
+  @column()
+  declare role: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
   @column()
