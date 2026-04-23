@@ -5,14 +5,16 @@
 
 export const controllers = {
   AdminRestaurants: () => import('#controllers/admin_restaurants_controller'),
+  Favorites: () => import('#controllers/favorites_controller'),
+  Follows: () => import('#controllers/follows_controller'),
   Home: () => import('#controllers/home_controller'),
   NewAccount: () => import('#controllers/new_account_controller'),
   PourToi: () => import('#controllers/pour_toi_controller'),
   Profile: () => import('#controllers/profile_controller'),
+  PublicProfiles: () => import('#controllers/public_profiles_controller'),
   Restaurants: () => import('#controllers/restaurants_controller'),
+  Search: () => import('#controllers/search_controller'),
   Session: () => import('#controllers/session_controller'),
   Swipe: () => import('#controllers/swipe_controller'),
-  AdminRestaurants: () => import('#controllers/admin_restaurants_controller'),
-  Search: () => import('#controllers/search_controller'),
-  PublicProfiles: () => import('#controllers/public_profiles_controller'),
+  Visits: () => import('#controllers/visits_controller'),
 }

@@ -1,5 +1,6 @@
 import { Link } from '@inertiajs/react'
 import { useState } from 'react'
+import { csrfPost } from '~/utils/api'
 import NewSection from '~/components/NewSection'
 import SearchBar from '~/components/SearchBar'
 import PrimaryTitle from '~/components/PrimaryTitle'
@@ -15,6 +16,7 @@ interface RestaurantItem {
   maxPrice: number | null
   cuisine: string | null
   image: string
+  isFavorited: boolean
 }
 
 interface Props {
@@ -23,25 +25,48 @@ interface Props {
 
 const HERO_IMAGE = 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=900&q=80'
 
+type StarFilter = 'ALL' | 'THREE' | 'TWO' | 'ONE' | 'BIB'
+
+const FILTER_CHIPS: { key: StarFilter; label: string }[] = [
+  { key: 'ALL', label: 'Tous' },
+  { key: 'THREE', label: '⭐⭐⭐' },
+  { key: 'TWO', label: '⭐⭐' },
+  { key: 'ONE', label: '⭐' },
+  { key: 'BIB', label: '🍽 Bib Gourmand' },
+]
+
+function matchesFilter(r: RestaurantItem, filter: StarFilter): boolean {
+  if (filter === 'ALL') return true
+  if (filter === 'BIB') return r.michelinStar === null && (r.maxPrice === null || r.maxPrice <= 40)
+  return r.michelinStar === filter
+}
+
 export default function RestaurantsIndex({ restaurants }: Props) {
   const [query, setQuery] = useState('')
-  const [filtered, setFiltered] = useState(restaurants)
+  const [starFilter, setStarFilter] = useState<StarFilter>('ALL')
+  const [favMap, setFavMap] = useState<Record<number, boolean>>(
+    Object.fromEntries(restaurants.map((r) => [r.id, r.isFavorited]))
+  )
 
-  const handleSearch = (q: string) => {
-    const lower = q.toLowerCase()
-    setFiltered(
-      restaurants.filter(
-        (r) =>
-          r.name.toLowerCase().includes(lower) ||
-          r.city?.toLowerCase().includes(lower) ||
-          r.cuisine?.toLowerCase().includes(lower)
-      )
-    )
-  }
+  const filtered = restaurants.filter(
+    (r) =>
+      matchesFilter(r, starFilter) &&
+      (!query.trim() ||
+        r.name.toLowerCase().includes(query.toLowerCase()) ||
+        r.city?.toLowerCase().includes(query.toLowerCase()) ||
+        r.cuisine?.toLowerCase().includes(query.toLowerCase()))
+  )
 
-  const handleChange = (val: string) => {
-    setQuery(val)
-    if (!val.trim()) setFiltered(restaurants)
+  const handleChange = (val: string) => setQuery(val)
+
+  const toggleFavorite = async (e: React.MouseEvent, id: number) => {
+    e.preventDefault()
+    try {
+      const data = await csrfPost<{ favorited: boolean }>(`/restaurants/${id}/favorite`)
+      setFavMap((prev) => ({ ...prev, [id]: data.favorited }))
+    } catch {
+      setFavMap((prev) => ({ ...prev, [id]: !prev[id] }))
+    }
   }
 
   return (
@@ -60,15 +85,42 @@ export default function RestaurantsIndex({ restaurants }: Props) {
             placeholder="Destination ou nom de l'hôtel ..."
             value={query}
             onChange={handleChange}
-            onSearch={handleSearch}
+            onSearch={handleChange}
           />
+        </div>
+      </div>
+
+      {/* Filter chips */}
+      <div className="px-4 pb-4 lg:px-8 lg:max-w-6xl lg:mx-auto">
+        <div className="flex gap-2 overflow-x-auto scrollbar-none pb-1">
+          {FILTER_CHIPS.map((chip) => (
+            <button
+              key={chip.key}
+              onClick={() => setStarFilter(chip.key)}
+              className={[
+                'shrink-0 px-4 py-1.5 rounded-full text-[12px] font-semibold border transition-colors whitespace-nowrap',
+                starFilter === chip.key
+                  ? chip.key === 'BIB'
+                    ? 'bg-green-600 text-white border-green-600'
+                    : 'bg-red-primary text-white border-red-primary'
+                  : 'bg-white text-gray-600 border-gray-200',
+              ].join(' ')}
+            >
+              {chip.label}
+            </button>
+          ))}
         </div>
       </div>
 
       {/* Cards */}
       <div className="px-4 flex flex-col gap-4 lg:px-8 lg:max-w-6xl lg:mx-auto lg:grid lg:grid-cols-2 lg:gap-5">
         {filtered.map((r) => (
-          <RestaurantCard key={r.id} r={r} />
+          <RestaurantCard
+            key={r.id}
+            r={r}
+            isFavorited={favMap[r.id] ?? false}
+            onFavorite={toggleFavorite}
+          />
         ))}
         {filtered.length === 0 && (
           <p className="col-span-2 text-center py-16 text-gray-400 text-[14px]">
@@ -83,9 +135,18 @@ export default function RestaurantsIndex({ restaurants }: Props) {
   )
 }
 
-function RestaurantCard({ r }: { r: RestaurantItem }) {
-  const address = [r.street, r.city, r.country].filter(Boolean).join(', ')
+function RestaurantCard({
+  r,
+  isFavorited,
+  onFavorite,
+}: {
+  r: RestaurantItem
+  isFavorited: boolean
+  onFavorite: (e: React.MouseEvent, id: number) => void
+}) {
+  const address = [r.city, r.country].filter(Boolean).join(', ')
   const primaryCuisine = r.cuisine?.split(',')[0].trim() ?? ''
+  const isBib = r.michelinStar === null && (r.maxPrice === null || r.maxPrice <= 40)
 
   return (
     <Link
@@ -100,28 +161,28 @@ function RestaurantCard({ r }: { r: RestaurantItem }) {
         loading="lazy"
       />
 
-      {/* Gradient overlay — assombri pour lisibilité du texte */}
+      {/* Gradient */}
       <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/35 to-black/10" />
 
-      {/* Top-right : checkmark + bookmark */}
+      {/* Top-right: Bib tag + favorite */}
       <div className="absolute top-3 right-3 flex items-center gap-1.5">
-        <div className="w-8 h-8 rounded-full bg-red-primary flex items-center justify-center shadow-md">
-          <svg width="14" height="14" fill="none" stroke="white" strokeWidth="2.5" viewBox="0 0 24 24">
-            <polyline points="20 6 9 17 4 12" />
-          </svg>
-        </div>
+        {isBib && (
+          <span className="bg-green-600 text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide">
+            Bib
+          </span>
+        )}
         <button
           aria-label="Sauvegarder"
-          className="w-8 h-8 flex items-center justify-center text-white/70"
-          onClick={(e) => e.preventDefault()}
+          className={`w-8 h-8 flex items-center justify-center transition-colors ${isFavorited ? 'text-red-400' : 'text-white/70'}`}
+          onClick={(e) => onFavorite(e, r.id)}
         >
-          <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
-            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+          <svg width="18" height="18" fill={isFavorited ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
           </svg>
         </button>
       </div>
 
-      {/* Bottom content — tout sur l'image */}
+      {/* Bottom content */}
       <div className="absolute bottom-0 left-0 right-0 px-4 pb-3.5">
         <p className="font-title text-[17px] font-semibold text-white leading-snug line-clamp-1 mb-0.5">
           {r.name}
@@ -135,7 +196,6 @@ function RestaurantCard({ r }: { r: RestaurantItem }) {
           {primaryCuisine}
         </p>
 
-        {/* Bottom row */}
         <div className="flex items-center justify-start">
           <div className="flex items-center">
             <div className="w-7 h-7 rounded-full bg-gray-400 border-[1.5px] border-white/50" />

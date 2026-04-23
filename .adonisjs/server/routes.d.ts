@@ -27,6 +27,9 @@ export type ScannedRoutes = {
     'profile.show': { paramsTuple?: []; params?: {} }
     'profile.edit': { paramsTuple?: []; params?: {} }
     'profile.update': { paramsTuple?: []; params?: {} }
+    'users.follow': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'restaurants.favorite': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'restaurants.visit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   GET: {
     'new_account.create': { paramsTuple?: []; params?: {} }
@@ -69,6 +72,9 @@ export type ScannedRoutes = {
     'session.store': { paramsTuple?: []; params?: {} }
     'session.destroy': { paramsTuple?: []; params?: {} }
     'admin.restaurants.store': { paramsTuple?: []; params?: {} }
+    'users.follow': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'restaurants.favorite': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'restaurants.visit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   PUT: {
     'admin.restaurants.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }

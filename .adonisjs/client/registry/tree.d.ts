@@ -18,10 +18,13 @@ export interface ApiDefinition {
   search: typeof routes['search']
   users: {
     show: typeof routes['users.show']
+    follow: typeof routes['users.follow']
   }
   restaurants: {
     index: typeof routes['restaurants.index']
     show: typeof routes['restaurants.show']
+    favorite: typeof routes['restaurants.favorite']
+    visit: typeof routes['restaurants.visit']
   }
   admin: {
     restaurants: {

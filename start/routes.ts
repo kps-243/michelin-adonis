@@ -78,10 +78,18 @@ router
   .as('admin')
 
 const ProfileController = () => import('#controllers/profile_controller')
+const FollowsController = () => import('#controllers/follows_controller')
+const FavoritesController = () => import('#controllers/favorites_controller')
+const VisitsController = () => import('#controllers/visits_controller')
+
 router
   .group(() => {
     router.get('/profile', [ProfileController, 'show']).as('profile.show')
     router.get('/profile/edit', [ProfileController, 'edit']).as('profile.edit')
     router.put('/profile', [ProfileController, 'update']).as('profile.update')
+
+    router.post('/users/:id/follow', [FollowsController, 'toggle']).as('users.follow')
+    router.post('/restaurants/:id/favorite', [FavoritesController, 'toggle']).as('restaurants.favorite')
+    router.post('/restaurants/:id/visit', [VisitsController, 'toggle']).as('restaurants.visit')
   })
   .use(middleware.auth())

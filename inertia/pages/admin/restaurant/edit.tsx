@@ -1,5 +1,6 @@
 import { useForm } from '@inertiajs/react'
 import { Link } from '@inertiajs/react'
+import SecondaryTitle from '~/components/SecondaryTitle'
 
 interface Restaurant {
   id: number
@@ -61,35 +62,44 @@ export default function AdminRestaurantEdit({ restaurant }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF8F4] text-[#1A1A1A] pb-24">
-      <header className="sticky top-0 z-40 bg-[#FAF8F4] border-b border-gray-100 px-5 py-3 flex items-center gap-3">
-        <Link
-          href={isEdit ? `/admin/restaurants/${restaurant.id}` : '/admin/restaurants'}
-          className="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-gray-500 hover:border-[#E4002B] hover:text-[#E4002B] transition-colors"
-        >
-          ←
-        </Link>
-        <div className="flex-1">
-          <h1 className="font-cormorant text-xl font-semibold leading-tight">
-            {isEdit ? 'Modifier le restaurant' : 'Nouveau restaurant'}
-          </h1>
-          {isEdit && (
-            <p className="text-[11px] text-gray-400 truncate">{restaurant.name}</p>
-          )}
+    <div className="min-h-screen bg-[#EFEFEF] pb-24">
+
+      {/* Header */}
+      <div className="bg-white shadow-sm sticky top-0 z-40">
+        <div className="px-4 py-3 flex items-center gap-3 lg:max-w-5xl lg:mx-auto lg:px-8 lg:py-4">
+          <Link
+            href={isEdit ? `/admin/restaurants/${restaurant.id}` : '/admin/restaurants'}
+            className="w-9 h-9 flex items-center justify-center rounded-full border border-gray-200 text-gray-500 hover:border-red-primary hover:text-red-primary transition-colors shrink-0"
+          >
+            <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+          </Link>
+          <div className="flex-1 min-w-0">
+            <SecondaryTitle hidden>
+              {isEdit ? 'Modifier le restaurant' : 'Nouveau restaurant'}
+            </SecondaryTitle>
+            {isEdit && (
+              <p className="text-[11px] text-gray-400 truncate">{restaurant.name}</p>
+            )}
+          </div>
         </div>
-      </header>
+      </div>
 
-      <form onSubmit={handleSubmit} className="px-5 py-6 space-y-4">
+      {/* Form */}
+      <form onSubmit={handleSubmit} className="px-4 py-5 flex flex-col gap-4 lg:max-w-5xl lg:mx-auto lg:px-8 lg:grid lg:grid-cols-2 lg:items-start">
 
-        <Field label="Nom du restaurant" error={form.errors.name}>
-          <input
-            type="text"
-            value={form.data.name}
-            onChange={(e) => form.setData('name', e.target.value)}
-            className={inputCls(!!form.errors.name)}
-            placeholder="Ex: Le Grand Véfour"
-          />
-        </Field>
+        <div className="lg:col-span-2">
+          <Field label="Nom du restaurant" error={form.errors.name}>
+            <input
+              type="text"
+              value={form.data.name}
+              onChange={(e) => form.setData('name', e.target.value)}
+              className={inputCls(!!form.errors.name)}
+              placeholder="Ex: Le Grand Véfour"
+            />
+          </Field>
+        </div>
 
         <Field label="Cuisine" error={form.errors.cuisine}>
           <input
@@ -202,26 +212,28 @@ export default function AdminRestaurantEdit({ restaurant }: Props) {
           </Field>
         </div>
 
-        <button
-          type="submit"
-          disabled={form.processing}
-          className="w-full py-4 bg-[#E4002B] text-white text-[13px] font-medium rounded-2xl tracking-wider hover:bg-[#c4001e] transition-colors disabled:opacity-50 mt-2"
-        >
-          {form.processing
-            ? '...'
-            : isEdit
-              ? 'Enregistrer les modifications'
-              : 'Créer le restaurant'}
-        </button>
-
-        {isEdit && (
-          <Link
-            href={`/admin/restaurants/${restaurant.id}`}
-            className="block text-center text-[12px] text-gray-400 py-2 hover:text-gray-600 transition-colors"
+        <div className="lg:col-span-2 flex flex-col gap-3">
+          <button
+            type="submit"
+            disabled={form.processing}
+            className="w-full py-4 bg-red-primary text-white text-[14px] font-semibold rounded-2xl hover:opacity-90 transition-opacity disabled:opacity-50"
           >
-            Annuler
-          </Link>
-        )}
+            {form.processing
+              ? '...'
+              : isEdit
+                ? 'Enregistrer les modifications'
+                : 'Créer le restaurant'}
+          </button>
+          {isEdit && (
+            <Link
+              href={`/admin/restaurants/${restaurant.id}`}
+              className="block text-center text-[12px] text-gray-400 py-2 hover:text-gray-600 transition-colors"
+            >
+              Annuler
+            </Link>
+          )}
+        </div>
+
       </form>
     </div>
   )
@@ -229,10 +241,10 @@ export default function AdminRestaurantEdit({ restaurant }: Props) {
 
 function inputCls(hasError: boolean) {
   return [
-    'w-full px-4 py-3 rounded-xl bg-white border-[1.5px] text-[13px] outline-none transition-colors',
+    'w-full px-4 py-3 rounded-xl bg-white border-[1.5px] text-[13px] text-gray-900 outline-none transition-colors focus:ring-0',
     hasError
-      ? 'border-[#E4002B] focus:border-[#E4002B]'
-      : 'border-gray-200 focus:border-[#1A1A1A]',
+      ? 'border-red-primary focus:border-red-primary'
+      : 'border-gray-200 focus:border-gray-700',
   ].join(' ')
 }
 
@@ -247,11 +259,11 @@ function Field({
 }) {
   return (
     <div>
-      <label className="block text-[10px] uppercase tracking-[0.12em] text-gray-500 mb-1.5 font-medium">
+      <label className="block text-[10px] uppercase tracking-[0.12em] text-gray-500 mb-1.5 font-semibold">
         {label}
       </label>
       {children}
-      {error && <p className="text-[11px] text-[#E4002B] mt-1">{error}</p>}
+      {error && <p className="text-[11px] text-red-primary mt-1">{error}</p>}
     </div>
   )
 }
