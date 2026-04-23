@@ -127,30 +127,6 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/restaurants_controller').default['index']>>>
     }
   }
-  'restaurants.create': {
-    methods: ["GET","HEAD"]
-    pattern: '/restaurants/create'
-    types: {
-      body: {}
-      paramsTuple: []
-      params: {}
-      query: {}
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/restaurants_controller').default['create']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/restaurants_controller').default['create']>>>
-    }
-  }
-  'restaurants.store': {
-    methods: ["POST"]
-    pattern: '/restaurants'
-    types: {
-      body: ExtractBody<InferInput<(typeof import('#validators/restaurant').restaurantValidator)>>
-      paramsTuple: []
-      params: {}
-      query: ExtractQuery<InferInput<(typeof import('#validators/restaurant').restaurantValidator)>>
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/restaurants_controller').default['store']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/restaurants_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
-    }
-  }
   'restaurants.show': {
     methods: ["GET","HEAD"]
     pattern: '/restaurants/:id'
@@ -163,40 +139,88 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/restaurants_controller').default['show']>>>
     }
   }
-  'restaurants.edit': {
+  'admin.restaurants.index': {
     methods: ["GET","HEAD"]
-    pattern: '/restaurants/:id/edit'
+    pattern: '/admin/restaurants'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/admin_restaurants_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/admin_restaurants_controller').default['index']>>>
+    }
+  }
+  'admin.restaurants.create': {
+    methods: ["GET","HEAD"]
+    pattern: '/admin/restaurants/create'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/admin_restaurants_controller').default['create']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/admin_restaurants_controller').default['create']>>>
+    }
+  }
+  'admin.restaurants.store': {
+    methods: ["POST"]
+    pattern: '/admin/restaurants'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/restaurant').restaurantValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/restaurant').restaurantValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/admin_restaurants_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/admin_restaurants_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'admin.restaurants.show': {
+    methods: ["GET","HEAD"]
+    pattern: '/admin/restaurants/:id'
     types: {
       body: {}
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
       query: {}
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/restaurants_controller').default['edit']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/restaurants_controller').default['edit']>>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/admin_restaurants_controller').default['show']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/admin_restaurants_controller').default['show']>>>
     }
   }
-  'restaurants.update': {
+  'admin.restaurants.edit': {
+    methods: ["GET","HEAD"]
+    pattern: '/admin/restaurants/:id/edit'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/admin_restaurants_controller').default['edit']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/admin_restaurants_controller').default['edit']>>>
+    }
+  }
+  'admin.restaurants.update': {
     methods: ["PUT","PATCH"]
-    pattern: '/restaurants/:id'
+    pattern: '/admin/restaurants/:id'
     types: {
       body: ExtractBody<InferInput<(typeof import('#validators/restaurant').restaurantValidator)>>
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
       query: ExtractQuery<InferInput<(typeof import('#validators/restaurant').restaurantValidator)>>
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/restaurants_controller').default['update']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/restaurants_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/admin_restaurants_controller').default['update']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/admin_restaurants_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
-  'restaurants.destroy': {
+  'admin.restaurants.destroy': {
     methods: ["DELETE"]
-    pattern: '/restaurants/:id'
+    pattern: '/admin/restaurants/:id'
     types: {
       body: {}
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
       query: {}
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/restaurants_controller').default['destroy']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/restaurants_controller').default['destroy']>>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/admin_restaurants_controller').default['destroy']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/admin_restaurants_controller').default['destroy']>>>
     }
   }
   'profile.show': {

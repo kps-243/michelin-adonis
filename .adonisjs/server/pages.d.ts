@@ -27,5 +27,10 @@ declare module '@adonisjs/inertia/types' {
     'Restaurants': ExtractProps<(typeof import('../../inertia/pages/Restaurants.tsx'))['default']>
     'Sejours': ExtractProps<(typeof import('../../inertia/pages/Sejours.tsx'))['default']>
     'Swipe': ExtractProps<(typeof import('../../inertia/pages/Swipe.tsx'))['default']>
+    'restaurants/index': ExtractProps<(typeof import('../../inertia/pages/restaurants/index.tsx'))['default']>
+    'restaurants/single': ExtractProps<(typeof import('../../inertia/pages/restaurants/single.tsx'))['default']>
+    'admin/restaurant/index': ExtractProps<(typeof import('../../inertia/pages/admin/restaurant/index.tsx'))['default']>
+    'admin/restaurant/single': ExtractProps<(typeof import('../../inertia/pages/admin/restaurant/single.tsx'))['default']>
+    'admin/restaurant/edit': ExtractProps<(typeof import('../../inertia/pages/admin/restaurant/edit.tsx'))['default']>
   }
 }

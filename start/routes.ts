@@ -55,8 +55,19 @@ router
   })
   .as('map')
 
+// Public restaurant pages
 const RestaurantsController = () => import('#controllers/restaurants_controller')
-router.resource('restaurants', RestaurantsController)
+router.get('/restaurants', [RestaurantsController, 'index']).as('restaurants.index')
+router.get('/restaurants/:id', [RestaurantsController, 'show']).as('restaurants.show')
+
+// Admin CRUD
+const AdminRestaurantsController = () => import('#controllers/admin_restaurants_controller')
+router
+  .group(() => {
+    router.resource('restaurants', AdminRestaurantsController)
+  })
+  .prefix('/admin')
+  .as('admin')
 
 const ProfileController = () => import('#controllers/profile_controller')
 router

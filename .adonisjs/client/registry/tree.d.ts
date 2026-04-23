@@ -17,12 +17,18 @@ export interface ApiDefinition {
   map: typeof routes['map']
   restaurants: {
     index: typeof routes['restaurants.index']
-    create: typeof routes['restaurants.create']
-    store: typeof routes['restaurants.store']
     show: typeof routes['restaurants.show']
-    edit: typeof routes['restaurants.edit']
-    update: typeof routes['restaurants.update']
-    destroy: typeof routes['restaurants.destroy']
+  }
+  admin: {
+    restaurants: {
+      index: typeof routes['admin.restaurants.index']
+      create: typeof routes['admin.restaurants.create']
+      store: typeof routes['admin.restaurants.store']
+      show: typeof routes['admin.restaurants.show']
+      edit: typeof routes['admin.restaurants.edit']
+      update: typeof routes['admin.restaurants.update']
+      destroy: typeof routes['admin.restaurants.destroy']
+    }
   }
   profile: {
     show: typeof routes['profile.show']

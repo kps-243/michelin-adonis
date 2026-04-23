@@ -44,7 +44,7 @@ export default function SearchBar({
   return (
     <form
       onSubmit={handleSubmit}
-      className={`flex items-center gap-1 bg-white rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.08)] p-1 ${className}`.trim()}
+      className={`flex items-center gap-1 bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] p-1 ${className}`.trim()}
       role="search"
     >
       <input

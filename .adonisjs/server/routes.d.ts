@@ -14,12 +14,14 @@ export type ScannedRoutes = {
     'PourToi': { paramsTuple?: []; params?: {} }
     'map': { paramsTuple?: []; params?: {} }
     'restaurants.index': { paramsTuple?: []; params?: {} }
-    'restaurants.create': { paramsTuple?: []; params?: {} }
-    'restaurants.store': { paramsTuple?: []; params?: {} }
     'restaurants.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
-    'restaurants.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
-    'restaurants.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
-    'restaurants.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.restaurants.index': { paramsTuple?: []; params?: {} }
+    'admin.restaurants.create': { paramsTuple?: []; params?: {} }
+    'admin.restaurants.store': { paramsTuple?: []; params?: {} }
+    'admin.restaurants.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.restaurants.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.restaurants.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.restaurants.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'profile.show': { paramsTuple?: []; params?: {} }
     'profile.edit': { paramsTuple?: []; params?: {} }
     'profile.update': { paramsTuple?: []; params?: {} }
@@ -32,9 +34,11 @@ export type ScannedRoutes = {
     'PourToi': { paramsTuple?: []; params?: {} }
     'map': { paramsTuple?: []; params?: {} }
     'restaurants.index': { paramsTuple?: []; params?: {} }
-    'restaurants.create': { paramsTuple?: []; params?: {} }
     'restaurants.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
-    'restaurants.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.restaurants.index': { paramsTuple?: []; params?: {} }
+    'admin.restaurants.create': { paramsTuple?: []; params?: {} }
+    'admin.restaurants.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.restaurants.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'profile.show': { paramsTuple?: []; params?: {} }
     'profile.edit': { paramsTuple?: []; params?: {} }
   }
@@ -46,9 +50,11 @@ export type ScannedRoutes = {
     'PourToi': { paramsTuple?: []; params?: {} }
     'map': { paramsTuple?: []; params?: {} }
     'restaurants.index': { paramsTuple?: []; params?: {} }
-    'restaurants.create': { paramsTuple?: []; params?: {} }
     'restaurants.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
-    'restaurants.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.restaurants.index': { paramsTuple?: []; params?: {} }
+    'admin.restaurants.create': { paramsTuple?: []; params?: {} }
+    'admin.restaurants.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.restaurants.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'profile.show': { paramsTuple?: []; params?: {} }
     'profile.edit': { paramsTuple?: []; params?: {} }
   }
@@ -56,17 +62,17 @@ export type ScannedRoutes = {
     'new_account.store': { paramsTuple?: []; params?: {} }
     'session.store': { paramsTuple?: []; params?: {} }
     'session.destroy': { paramsTuple?: []; params?: {} }
-    'restaurants.store': { paramsTuple?: []; params?: {} }
+    'admin.restaurants.store': { paramsTuple?: []; params?: {} }
   }
   PUT: {
-    'restaurants.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.restaurants.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'profile.update': { paramsTuple?: []; params?: {} }
   }
   PATCH: {
-    'restaurants.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.restaurants.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   DELETE: {
-    'restaurants.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.restaurants.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
 }
 declare module '@adonisjs/core/types/http' {
