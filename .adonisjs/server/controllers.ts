@@ -11,4 +11,5 @@ export const controllers = {
   Restaurants: () => import('#controllers/restaurants_controller'),
   Session: () => import('#controllers/session_controller'),
   Swipe: () => import('#controllers/swipe_controller'),
+  AdminRestaurants: () => import('#controllers/admin_restaurants_controller'),
 }

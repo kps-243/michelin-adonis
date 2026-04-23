@@ -21,23 +21,24 @@ function starBadge(star: Restaurant['michelinStar']) {
   return null
 }
 
-export default function RestaurantIndex({ restaurants }: Props) {
+export default function AdminRestaurantIndex({ restaurants }: Props) {
   const handleDelete = (id: number, name: string) => {
     if (confirm(`Supprimer "${name}" ?`)) {
-      router.delete(`/restaurants/${id}`)
+      router.delete(`/admin/restaurants/${id}`)
     }
   }
 
   return (
     <div className="min-h-screen bg-[#FAF8F4] text-[#1A1A1A] pb-24">
-      {/* Header */}
       <header className="sticky top-0 z-40 bg-[#FAF8F4] border-b border-gray-100 px-5 py-4 flex items-center justify-between">
         <div>
           <h1 className="font-cormorant text-[26px] font-semibold leading-tight">Restaurants</h1>
-          <p className="text-[11px] text-gray-400 tracking-wide">{restaurants.length} établissement{restaurants.length !== 1 ? 's' : ''}</p>
+          <p className="text-[11px] text-gray-400 tracking-wide">
+            {restaurants.length} établissement{restaurants.length !== 1 ? 's' : ''}
+          </p>
         </div>
         <Link
-          href="/restaurants/create"
+          href="/admin/restaurants/create"
           className="bg-[#E4002B] text-white text-[11px] font-medium px-4 py-2 rounded-full tracking-wider hover:bg-[#c4001e] transition-colors"
         >
           + Ajouter
@@ -51,7 +52,7 @@ export default function RestaurantIndex({ restaurants }: Props) {
             <p className="font-cormorant text-2xl text-gray-400 mb-1">Aucun restaurant</p>
             <p className="text-[13px] text-gray-400 mb-6">Commencez par en ajouter un</p>
             <Link
-              href="/restaurants/create"
+              href="/admin/restaurants/create"
               className="inline-block bg-[#E4002B] text-white text-xs font-medium px-6 py-3 rounded-full tracking-wider"
             >
               Créer un restaurant
@@ -63,7 +64,6 @@ export default function RestaurantIndex({ restaurants }: Props) {
               key={r.id}
               className="bg-white rounded-2xl p-4 shadow-[0_1px_8px_rgba(0,0,0,0.06)] flex items-center gap-4"
             >
-              {/* Star indicator */}
               <div className="w-10 h-10 rounded-full bg-[#FAF8F4] flex items-center justify-center text-base shrink-0">
                 {starBadge(r.michelinStar) ?? '🍽'}
               </div>
@@ -80,13 +80,13 @@ export default function RestaurantIndex({ restaurants }: Props) {
                   {r.maxPrice}€
                 </span>
                 <Link
-                  href={`/restaurants/${r.id}`}
+                  href={`/admin/restaurants/${r.id}`}
                   className="text-[11px] text-gray-600 border border-gray-200 px-3 py-1.5 rounded-full hover:border-[#1A1A1A] transition-colors"
                 >
                   Voir
                 </Link>
                 <Link
-                  href={`/restaurants/${r.id}/edit`}
+                  href={`/admin/restaurants/${r.id}/edit`}
                   className="text-[11px] text-[#E4002B] border border-[#E4002B]/40 px-3 py-1.5 rounded-full hover:border-[#E4002B] transition-colors"
                 >
                   Éditer

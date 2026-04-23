@@ -1,4 +1,6 @@
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
+import type { HasMany } from '@adonisjs/lucid/types/relations'
+import Image from '#models/image'
 import { DateTime } from 'luxon'
 
 export default class Restaurant extends BaseModel {
@@ -43,4 +45,7 @@ export default class Restaurant extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
+
+  @hasMany(() => Image)
+  declare images: HasMany<typeof Image>
 }

@@ -1,6 +1,5 @@
 import { useForm } from '@inertiajs/react'
 import { Link } from '@inertiajs/react'
-import BottomNav from '../../components/NavBar'
 
 interface Restaurant {
   id: number
@@ -35,7 +34,7 @@ type FormData = {
   lng: number | string
 }
 
-export default function RestaurantEdit({ restaurant }: Props) {
+export default function AdminRestaurantEdit({ restaurant }: Props) {
   const isEdit = restaurant !== null
 
   const form = useForm<FormData>({
@@ -55,18 +54,17 @@ export default function RestaurantEdit({ restaurant }: Props) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (isEdit) {
-      form.put(`/restaurants/${restaurant.id}`)
+      form.put(`/admin/restaurants/${restaurant.id}`)
     } else {
-      form.post('/restaurants')
+      form.post('/admin/restaurants')
     }
   }
 
   return (
     <div className="min-h-screen bg-[#FAF8F4] text-[#1A1A1A] pb-24">
-      {/* Header */}
       <header className="sticky top-0 z-40 bg-[#FAF8F4] border-b border-gray-100 px-5 py-3 flex items-center gap-3">
         <Link
-          href={isEdit ? `/restaurants/${restaurant.id}` : '/restaurants'}
+          href={isEdit ? `/admin/restaurants/${restaurant.id}` : '/admin/restaurants'}
           className="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-gray-500 hover:border-[#E4002B] hover:text-[#E4002B] transition-colors"
         >
           ←
@@ -83,7 +81,6 @@ export default function RestaurantEdit({ restaurant }: Props) {
 
       <form onSubmit={handleSubmit} className="px-5 py-6 space-y-4">
 
-        {/* Nom */}
         <Field label="Nom du restaurant" error={form.errors.name}>
           <input
             type="text"
@@ -94,18 +91,16 @@ export default function RestaurantEdit({ restaurant }: Props) {
           />
         </Field>
 
-        {/* Cuisine */}
         <Field label="Cuisine" error={form.errors.cuisine}>
           <input
             type="text"
             value={form.data.cuisine}
             onChange={(e) => form.setData('cuisine', e.target.value)}
             className={inputCls(!!form.errors.cuisine)}
-            placeholder="Ex: Française, Japonaise, Italienne..."
+            placeholder="Ex: Française, Japonaise..."
           />
         </Field>
 
-        {/* Étoile Michelin */}
         <Field label="Distinction Michelin" error={form.errors.michelinStar}>
           <select
             value={form.data.michelinStar ?? ''}
@@ -121,7 +116,6 @@ export default function RestaurantEdit({ restaurant }: Props) {
           </select>
         </Field>
 
-        {/* Prix max */}
         <Field label="Prix maximum (€)" error={form.errors.maxPrice}>
           <input
             type="number"
@@ -134,7 +128,6 @@ export default function RestaurantEdit({ restaurant }: Props) {
           />
         </Field>
 
-        {/* Rue */}
         <Field label="Rue" error={form.errors.street}>
           <input
             type="text"
@@ -145,7 +138,6 @@ export default function RestaurantEdit({ restaurant }: Props) {
           />
         </Field>
 
-        {/* Postcode + Code postal */}
         <div className="grid grid-cols-2 gap-3">
           <Field label="Code postal" error={form.errors.postcode}>
             <input
@@ -167,7 +159,6 @@ export default function RestaurantEdit({ restaurant }: Props) {
           </Field>
         </div>
 
-        {/* Ville */}
         <Field label="Ville" error={form.errors.city}>
           <input
             type="text"
@@ -178,7 +169,6 @@ export default function RestaurantEdit({ restaurant }: Props) {
           />
         </Field>
 
-        {/* Pays */}
         <Field label="Pays" error={form.errors.country}>
           <input
             type="text"
@@ -189,7 +179,6 @@ export default function RestaurantEdit({ restaurant }: Props) {
           />
         </Field>
 
-        {/* GPS */}
         <div className="grid grid-cols-2 gap-3">
           <Field label="Latitude" error={form.errors.lat}>
             <input
@@ -213,7 +202,6 @@ export default function RestaurantEdit({ restaurant }: Props) {
           </Field>
         </div>
 
-        {/* Submit */}
         <button
           type="submit"
           disabled={form.processing}
@@ -228,15 +216,13 @@ export default function RestaurantEdit({ restaurant }: Props) {
 
         {isEdit && (
           <Link
-            href={`/restaurants/${restaurant.id}`}
+            href={`/admin/restaurants/${restaurant.id}`}
             className="block text-center text-[12px] text-gray-400 py-2 hover:text-gray-600 transition-colors"
           >
             Annuler
           </Link>
         )}
       </form>
-
-      <BottomNav active="home" />
     </div>
   )
 }
