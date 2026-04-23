@@ -1,5 +1,4 @@
 import { Link, router } from '@inertiajs/react'
-import BottomNav from '../../components/NavBar'
 
 interface Restaurant {
   id: number
@@ -65,7 +64,7 @@ export default function RestaurantIndex({ restaurants }: Props) {
               className="bg-white rounded-2xl p-4 shadow-[0_1px_8px_rgba(0,0,0,0.06)] flex items-center gap-4"
             >
               {/* Star indicator */}
-              <div className="w-10 h-10 rounded-full bg-[#FAF8F4] flex items-center justify-center text-base flex-shrink-0">
+              <div className="w-10 h-10 rounded-full bg-[#FAF8F4] flex items-center justify-center text-base shrink-0">
                 {starBadge(r.michelinStar) ?? '🍽'}
               </div>
 
@@ -76,7 +75,7 @@ export default function RestaurantIndex({ restaurants }: Props) {
                 </p>
               </div>
 
-              <div className="flex items-center gap-1.5 flex-shrink-0">
+              <div className="flex items-center gap-1.5 shrink-0">
                 <span className="font-cormorant text-[14px] font-semibold text-[#E4002B] mr-1">
                   {r.maxPrice}€
                 </span>
@@ -103,8 +102,6 @@ export default function RestaurantIndex({ restaurants }: Props) {
           ))
         )}
       </div>
-
-      <BottomNav active="home" />
     </div>
   )
 }

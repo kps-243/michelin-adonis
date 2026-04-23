@@ -1,6 +1,5 @@
 import { useState, useRef, useCallback } from 'react'
 import { Link } from '@inertiajs/react'
-import BottomNav from '../components/NavBar'
 import type { Restaurant } from '../../app/services/restaurant_service'
 
 interface Props {
@@ -183,12 +182,12 @@ export default function Swipe({ cards: initialCards }: Props) {
   const topCard = remaining[0]
 
   return (
-    <div className="h-[100dvh] bg-[#0D0D0D] text-[#F5F0E8] font-dm flex flex-col overflow-hidden">
+    <div className="h-dvh bg-[#0D0D0D] text-[#F5F0E8] font-dm flex flex-col overflow-hidden">
       {/* ── HEADER ── */}
-      <header className="h-[60px] flex items-center justify-between px-5 border-b border-white/[0.06] z-10 flex-shrink-0">
+      <header className="h-15 flex items-center justify-between px-5 border-b border-white/6 z-10 shrink-0">
         <Link
           href="/"
-          className="w-[38px] h-[38px] bg-white/[0.06] rounded-full flex items-center justify-center text-lg text-[#F5F0E8] no-underline"
+          className="w-9.5 h-9.5 bg-white/6 rounded-full flex items-center justify-center text-lg text-[#F5F0E8] no-underline"
         >
           ←
         </Link>
@@ -196,7 +195,7 @@ export default function Swipe({ cards: initialCards }: Props) {
           <div className="font-bebas text-[18px] tracking-[0.15em]">DÉCOUVERTE</div>
           <div className="text-[10px] text-gray-500 tracking-widest">Swipez pour explorer</div>
         </div>
-        <div className="bg-white/[0.08] rounded-full px-3.5 py-1.5 text-xs text-[#C8A96E] font-medium">
+        <div className="bg-white/8 rounded-full px-3.5 py-1.5 text-xs text-[#C8A96E] font-medium">
           ❤ {liked.length}
         </div>
       </header>
@@ -204,17 +203,17 @@ export default function Swipe({ cards: initialCards }: Props) {
       {/* ── SWIPE AREA ── */}
       <div className="flex-1 flex flex-col items-center justify-center px-4 pb-2 relative min-h-0">
         {/* Card Stack */}
-        <div className="relative w-full max-w-[360px] flex-1 min-h-0">
+        <div className="relative w-full max-w-90 flex-1 min-h-0">
 
           {/* Background cards (stack effect) */}
           {remaining[2] && (
-            <div className="absolute inset-0 rounded-[24px] overflow-hidden bg-[#1A1A1A] shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
+            <div className="absolute inset-0 rounded-3xl overflow-hidden bg-[#1A1A1A] shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
               style={{ transform: 'scale(0.9) translateY(32px)', zIndex: 0 }}>
               <img src={remaining[2].image} alt="" className="w-full h-full object-cover opacity-80" />
             </div>
           )}
           {remaining[1] && (
-            <div className="absolute inset-0 rounded-[24px] overflow-hidden bg-[#1A1A1A] shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
+            <div className="absolute inset-0 rounded-3xl overflow-hidden bg-[#1A1A1A] shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
               style={{ transform: 'scale(0.95) translateY(16px)', zIndex: 1 }}>
               <img src={remaining[1].image} alt="" className="w-full h-full object-cover opacity-80" />
             </div>
@@ -224,7 +223,7 @@ export default function Swipe({ cards: initialCards }: Props) {
           {topCard && (
             <div
               ref={cardRef}
-              className="absolute inset-0 rounded-[24px] overflow-hidden bg-[#1A1A1A] cursor-grab active:cursor-grabbing shadow-[0_20px_60px_rgba(0,0,0,0.5)] select-none"
+              className="absolute inset-0 rounded-3xl overflow-hidden bg-[#1A1A1A] cursor-grab active:cursor-grabbing shadow-[0_20px_60px_rgba(0,0,0,0.5)] select-none"
               style={{
                 zIndex: 3,
                 transition: isAnimatingOut ? 'transform 0.4s ease' : undefined,
@@ -247,7 +246,7 @@ export default function Swipe({ cards: initialCards }: Props) {
               />
 
               {/* Gradient */}
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/95 pointer-events-none" />
+              <div className="absolute inset-0 bg-linear-to-b from-transparent via-black/20 to-black/95 pointer-events-none" />
 
               {/* LIKE stamp */}
               <div
@@ -274,7 +273,7 @@ export default function Swipe({ cards: initialCards }: Props) {
               </div>
 
               {/* Card content */}
-              <div className="absolute bottom-0 left-0 right-0 p-5 z-[5]">
+              <div className="absolute bottom-0 left-0 right-0 p-5 z-5">
                 <div className="flex gap-2 mb-2.5 flex-wrap">
                   {topCard.stars > 0 && (
                     <div className="bg-[rgba(228,0,43,0.85)] backdrop-blur-sm text-white text-[11px] font-semibold px-3 py-1.5 rounded-full tracking-wide">
@@ -338,28 +337,28 @@ export default function Swipe({ cards: initialCards }: Props) {
 
         {/* Action buttons */}
         {!isEmpty && (
-          <div className="flex items-center justify-center gap-5 pt-4 pb-2 flex-shrink-0">
+          <div className="flex items-center justify-center gap-5 pt-4 pb-2 shrink-0">
             <button
               onClick={rewind}
-              className="w-[42px] h-[42px] rounded-full bg-[#1E1E1E] border-[1.5px] border-white/10 text-gray-500 text-base flex items-center justify-center transition-all hover:scale-110 active:scale-95"
+              className="w-10.5 h-10.5 rounded-full bg-[#1E1E1E] border-[1.5px] border-white/10 text-gray-500 text-base flex items-center justify-center transition-all hover:scale-110 active:scale-95"
             >
               ↩
             </button>
             <button
               onClick={() => triggerSwipe('left')}
-              className="w-[58px] h-[58px] rounded-full bg-[#1E1E1E] border-2 border-[rgba(228,0,43,0.3)] text-[#E4002B] text-2xl flex items-center justify-center shadow-[0_4px_16px_rgba(228,0,43,0.15)] transition-all hover:scale-110 active:scale-95"
+              className="w-14.5 h-14.5 rounded-full bg-[#1E1E1E] border-2 border-[rgba(228,0,43,0.3)] text-[#E4002B] text-2xl flex items-center justify-center shadow-[0_4px_16px_rgba(228,0,43,0.15)] transition-all hover:scale-110 active:scale-95"
             >
               ✕
             </button>
             <button
               onClick={() => triggerSwipe('up')}
-              className="w-[48px] h-[48px] rounded-full bg-[#1E1E1E] border-2 border-[rgba(245,158,11,0.3)] text-amber-500 text-lg flex items-center justify-center transition-all hover:scale-110 active:scale-95"
+              className="w-12 h-12 rounded-full bg-[#1E1E1E] border-2 border-[rgba(245,158,11,0.3)] text-amber-500 text-lg flex items-center justify-center transition-all hover:scale-110 active:scale-95"
             >
               ⭐
             </button>
             <button
               onClick={() => triggerSwipe('right')}
-              className="w-[58px] h-[58px] rounded-full bg-[#E4002B] text-white text-2xl flex items-center justify-center shadow-[0_4px_20px_rgba(228,0,43,0.4)] transition-all hover:scale-110 active:scale-95"
+              className="w-14.5 h-14.5 rounded-full bg-[#E4002B] text-white text-2xl flex items-center justify-center shadow-[0_4px_20px_rgba(228,0,43,0.4)] transition-all hover:scale-110 active:scale-95"
             >
               ♥
             </button>
@@ -369,7 +368,7 @@ export default function Swipe({ cards: initialCards }: Props) {
 
       {/* ── TOAST ── */}
       <div
-        className={`fixed top-[70px] left-1/2 -translate-x-1/2 px-5 py-2.5 rounded-full text-[13px] font-medium text-white pointer-events-none z-[1000] whitespace-nowrap transition-all duration-300 ${
+        className={`fixed top-17.5 left-1/2 -translate-x-1/2 px-5 py-2.5 rounded-full text-[13px] font-medium text-white pointer-events-none z-1000 whitespace-nowrap transition-all duration-300 ${
           toast.visible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-5'
         } ${
           toast.type === 'nope'
@@ -384,14 +383,12 @@ export default function Swipe({ cards: initialCards }: Props) {
 
       {/* ── LIKED PILL ── */}
       <div
-        className={`fixed bottom-[76px] right-4 bg-green-500 text-white px-4 py-2 rounded-full text-xs font-semibold pointer-events-none z-50 transition-all duration-300 ${
+        className={`fixed bottom-19 right-4 bg-green-500 text-white px-4 py-2 rounded-full text-xs font-semibold pointer-events-none z-50 transition-all duration-300 ${
           showLikedPill ? 'opacity-100 scale-100' : 'opacity-0 scale-80'
         }`}
       >
         ❤ {liked.length} table{liked.length > 1 ? 's' : ''} sauvegardée{liked.length > 1 ? 's' : ''}
       </div>
-
-      <BottomNav active="swipe" dark />
     </div>
   )
 }
