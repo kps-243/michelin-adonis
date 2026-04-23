@@ -16,7 +16,7 @@ export default function Header() {
           </span>
         </Link>
 
-        {!user && (
+        {user && (
           <Link
             href="/logout"
             method="post"
