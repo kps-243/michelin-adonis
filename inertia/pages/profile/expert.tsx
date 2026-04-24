@@ -43,13 +43,13 @@ export default function ExpertProfile({ user, isFollowing = false }: Props) {
   const bio = user.bio || "Spécialisé dans la recommandation d'adresses gastronomiques, je propose une sélection rigoureuse de restaurants et d'établissements remarquables. Certifié par Michelin, j'évalue chaque adresse selon des critères exigeants de qualité, de régularité, d'identité et d'expérience globale."
 
   return (
-    <div className="min-h-screen bg-[#F5F5F5] pb-24">
+    <div className="min-h-screen bg-[#F5F5F5] dark:bg-gray-900 pb-24 transition-colors">
 
       {/* ── DESKTOP WRAPPER ── */}
       <div className="lg:max-w-4xl lg:mx-auto">
 
         {/* Profile card */}
-        <div className="bg-white shadow-sm px-6 pt-6 pb-8 lg:rounded-2xl lg:mt-8 lg:shadow-md lg:flex lg:items-center lg:gap-8 lg:px-10 lg:py-10">
+        <div className="bg-white dark:bg-gray-800 shadow-sm px-6 pt-6 pb-8 lg:rounded-2xl lg:mt-8 lg:shadow-md lg:flex lg:items-center lg:gap-8 lg:px-10 lg:py-10">
 
           {/* Avatar */}
           <div className="flex justify-center mb-4 lg:mb-0 lg:shrink-0">
@@ -66,7 +66,7 @@ export default function ExpertProfile({ user, isFollowing = false }: Props) {
                   </svg>
                 )}
               </div>
-              <div className="absolute bottom-0 right-0 w-9 h-9 rounded-full bg-white shadow-md border-2 border-gray-100 flex items-center justify-center">
+              <div className="absolute bottom-0 right-0 w-9 h-9 rounded-full bg-white dark:bg-gray-700 shadow-md border-2 border-gray-100 dark:border-gray-600 flex items-center justify-center">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#AB152E" strokeWidth="2">
                   <circle cx="11" cy="11" r="6" />
                   <line x1="16" y1="16" x2="21" y2="21" />
@@ -79,7 +79,7 @@ export default function ExpertProfile({ user, isFollowing = false }: Props) {
           {/* Name + bio + follow */}
           <div className="flex flex-col items-center lg:items-start lg:flex-1">
             <div className="flex items-center gap-2 mb-3">
-              <p className="font-title text-[20px] lg:text-[28px] font-semibold text-gray-900">{displayName}</p>
+              <p className="font-title text-[20px] lg:text-[28px] font-semibold text-gray-900 dark:text-white">{displayName}</p>
               <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center shrink-0">
                 <svg width="9" height="9" fill="none" stroke="white" strokeWidth="3" viewBox="0 0 24 24">
                   <polyline points="20 6 9 17 4 12" />
@@ -102,7 +102,7 @@ export default function ExpertProfile({ user, isFollowing = false }: Props) {
               }}
               className={`px-8 py-2 rounded-full text-[13px] font-semibold transition-colors ${
                 following
-                  ? 'bg-gray-100 text-gray-700 border border-gray-200'
+                  ? 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-600'
                   : 'bg-red-primary text-white'
               }`}
             >
@@ -114,7 +114,7 @@ export default function ExpertProfile({ user, isFollowing = false }: Props) {
         {/* Bio (mobile) */}
         <section className="px-5 pt-6 pb-2 lg:hidden">
           <SecondaryTitle hidden>A propos de moi :</SecondaryTitle>
-          <p className="text-[14px] text-gray-700 leading-relaxed mt-2">{bio}</p>
+          <p className="text-[14px] text-gray-700 dark:text-gray-300 leading-relaxed mt-2">{bio}</p>
         </section>
 
         {/* Critiques */}
@@ -124,13 +124,13 @@ export default function ExpertProfile({ user, isFollowing = false }: Props) {
             {CRITIQUE_NAMES.map((name, i) => (
               <div
                 key={i}
-                className="flex items-center gap-3 bg-white rounded-2xl p-3 border border-gray-100 shadow-sm"
+                className="flex items-center gap-3 bg-white dark:bg-gray-800 rounded-2xl p-3 border border-gray-100 dark:border-gray-700 shadow-sm"
               >
                 <div className="w-16 h-16 rounded-xl overflow-hidden shrink-0">
                   <img src={CRITIQUE_IMAGES[i]} alt={name} className="w-full h-full object-cover" loading="lazy" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-title text-[14px] font-semibold text-gray-900 truncate">{name}</p>
+                  <p className="font-title text-[14px] font-semibold text-gray-900 dark:text-white truncate">{name}</p>
                   <MichelinStars count={CRITIQUE_STARS[i]} size={11} />
                   <p className="text-[11px] text-gray-400 mt-0.5 line-clamp-2">
                     Une expérience gastronomique exceptionnelle, digne des plus grandes tables.

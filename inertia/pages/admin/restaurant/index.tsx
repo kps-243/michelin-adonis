@@ -31,7 +31,7 @@ export default function AdminRestaurantIndex({ restaurants }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-[#EFEFEF] pb-24">
+    <div className="min-h-screen bg-[#EFEFEF] dark:bg-gray-900 pb-24 transition-colors">
 
       {/* Header */}
       <div className="bg-white shadow-sm sticky top-0 z-40">
@@ -58,8 +58,8 @@ export default function AdminRestaurantIndex({ restaurants }: Props) {
       {/* Content */}
       <div className="px-4 pt-5 lg:max-w-5xl lg:mx-auto lg:px-8">
         {restaurants.length === 0 ? (
-          <div className="bg-white rounded-2xl shadow-sm flex flex-col items-center py-20 px-6 text-center">
-            <div className="w-16 h-16 rounded-full bg-[#EFEFEF] flex items-center justify-center mb-4">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm flex flex-col items-center py-20 px-6 text-center">
+            <div className="w-16 h-16 rounded-full bg-[#EFEFEF] dark:bg-gray-700 flex items-center justify-center mb-4">
               <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" className="text-gray-400">
                 <path d="M3 12h18M3 6h18M3 18h18" />
               </svg>
@@ -80,16 +80,16 @@ export default function AdminRestaurantIndex({ restaurants }: Props) {
               return (
                 <div
                   key={r.id}
-                  className="bg-white rounded-2xl p-4 shadow-[0_2px_10px_rgba(0,0,0,0.06)] flex items-center gap-4"
+                  className="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-[0_2px_10px_rgba(0,0,0,0.06)] flex items-center gap-4"
                 >
                   {/* Star badge */}
-                  <div className="w-11 h-11 rounded-full bg-[#EFEFEF] flex items-center justify-center shrink-0">
+                  <div className="w-11 h-11 rounded-full bg-[#EFEFEF] dark:bg-gray-700 flex items-center justify-center shrink-0">
                     {star ? <MichelinStar size={18} /> : <span className="text-[15px]">🍽</span>}
                   </div>
 
                   {/* Info */}
                   <div className="flex-1 min-w-0">
-                    <p className="font-title text-[15px] font-semibold text-gray-900 truncate">{r.name}</p>
+                    <p className="font-title text-[15px] font-semibold text-gray-900 dark:text-white truncate">{r.name}</p>
                     <p className="text-[11px] text-gray-400 mt-0.5 truncate">
                       {r.cuisine} · {r.city}, {r.country}
                     </p>
@@ -106,7 +106,7 @@ export default function AdminRestaurantIndex({ restaurants }: Props) {
                     <div className="flex items-center gap-1.5">
                       <Link
                         href={`/admin/restaurants/${r.id}`}
-                        className="text-[11px] text-gray-600 border border-gray-200 px-2.5 py-1 rounded-full hover:border-gray-400 transition-colors"
+                        className="text-[11px] text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-600 px-2.5 py-1 rounded-full hover:border-gray-400 transition-colors"
                       >
                         Voir
                       </Link>
@@ -118,7 +118,7 @@ export default function AdminRestaurantIndex({ restaurants }: Props) {
                       </Link>
                       <button
                         onClick={() => handleDelete(r.id, r.name)}
-                        className="text-[11px] text-gray-400 border border-gray-200 w-7 h-7 rounded-full flex items-center justify-center hover:text-red-primary hover:border-red-200 transition-colors"
+                        className="text-[11px] text-gray-400 border border-gray-200 dark:border-gray-600 w-7 h-7 rounded-full flex items-center justify-center hover:text-red-primary hover:border-red-200 transition-colors"
                       >
                         <svg width="11" height="11" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                           <line x1="18" y1="6" x2="6" y2="18" />

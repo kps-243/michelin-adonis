@@ -73,11 +73,11 @@ function articleDesktopCls(i: number) {
 
 export default function Home({ featured }: Props) {
   return (
-    <div className="min-h-screen pb-24 container mx-auto px-4 lg:px-0">
+    <div className="min-h-screen pb-24 container mx-auto px-4 lg:px-0 dark:bg-gray-900 transition-colors">
       {/* ── SEARCH ── */}
       <div className="mt-4">
         <SearchBar
-          placeholder="Destination ou nom de l'hôtel ..."
+          placeholder="Restaurant, influenceur ou expert..."
           onSearch={(q) => router.visit(`/search?q=${encodeURIComponent(q)}`)}
         />
       </div>
@@ -192,13 +192,13 @@ export default function Home({ featured }: Props) {
             </div>
 
             {/* Partenaires – grille 2×2 de logos */}
-            <div className="relative rounded-2xl overflow-hidden bg-gray-100 h-44 lg:h-60 cursor-pointer">
+            <div className="relative rounded-2xl overflow-hidden bg-gray-100 dark:bg-gray-800 h-44 lg:h-60 cursor-pointer">
               <div className="grid grid-cols-2 gap-1.5 h-full p-1.5">
-                <div className="bg-white rounded-xl flex items-center justify-center px-2">
-                  <span className="text-[9px] font-bold tracking-widest text-[#1B2B6B] text-center">BLANCPAIN</span>
+                <div className="bg-white dark:bg-gray-700 rounded-xl flex items-center justify-center px-2">
+                  <span className="text-[9px] font-bold tracking-widest text-[#1B2B6B] dark:text-blue-300 text-center">BLANCPAIN</span>
                 </div>
-                <div className="bg-white rounded-xl flex flex-col items-center justify-center gap-0.5 px-2">
-                  <span className="text-[11px] font-bold tracking-wider text-gray-900">LAFONT</span>
+                <div className="bg-white dark:bg-gray-700 rounded-xl flex flex-col items-center justify-center gap-0.5 px-2">
+                  <span className="text-[11px] font-bold tracking-wider text-gray-900 dark:text-gray-100">LAFONT</span>
                   <span className="text-[6px] tracking-widest text-gray-400 uppercase">Manufacture</span>
                   <div className="flex gap-0.5 mt-0.5">
                     <div className="w-4 h-[2px] bg-red-primary rounded-full" />
@@ -212,7 +212,7 @@ export default function Home({ featured }: Props) {
                   <span className="text-[10px] font-bold text-white text-center">TheFork</span>
                 </div>
               </div>
-              <p className="absolute bottom-2.5 right-3 text-[10px] font-semibold text-gray-500 lg:text-[12px]">
+              <p className="absolute bottom-2.5 right-3 text-[10px] font-semibold text-gray-500 dark:text-gray-400 lg:text-[12px]">
                 Nos partenaires
               </p>
             </div>

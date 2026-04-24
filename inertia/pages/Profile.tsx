@@ -57,15 +57,15 @@ export default function Profile({ user, followedUsers, favoriteRestaurants, visi
   const displayName = [user.firstName, user.lastName].filter(Boolean).join(' ') || user.username
 
   return (
-    <div className="min-h-screen bg-[#EFEFEF] pb-24">
+    <div className="min-h-screen bg-[#EFEFEF] dark:bg-gray-900 pb-24 transition-colors">
 
       {/* ── PROFILE CARD ── */}
-      <div className="bg-white rounded-b-4xl shadow-sm lg:rounded-2xl lg:mx-auto lg:max-w-3xl lg:mt-8 lg:shadow-md">
+      <div className="bg-white dark:bg-gray-800 rounded-b-4xl shadow-sm lg:rounded-2xl lg:mx-auto lg:max-w-3xl lg:mt-8 lg:shadow-md">
         <div className="px-6 pt-6 pb-10 flex flex-col items-center lg:pt-10 lg:pb-12">
 
           {/* Avatar */}
           <div className="relative mb-5">
-            <div className="w-44 h-44 rounded-full bg-[#D9D9D9] overflow-hidden flex items-center justify-center lg:w-52 lg:h-52">
+            <div className="w-44 h-44 rounded-full bg-[#D9D9D9] dark:bg-gray-600 overflow-hidden flex items-center justify-center lg:w-52 lg:h-52">
               {user.avatar ? (
                 <img src={user.avatar} alt={displayName} className="w-full h-full object-cover" />
               ) : (
@@ -83,7 +83,7 @@ export default function Profile({ user, followedUsers, favoriteRestaurants, visi
           </div>
 
           {/* Name */}
-          <p className="font-title text-[1.5rem] lg:text-[2rem] font-semibold text-gray-900 text-center tracking-tight leading-tight mb-7">
+          <p className="font-title text-[1.5rem] lg:text-[2rem] font-semibold text-gray-900 dark:text-white text-center tracking-tight leading-tight mb-7">
             {displayName}
           </p>
 
@@ -92,36 +92,36 @@ export default function Profile({ user, followedUsers, favoriteRestaurants, visi
 
             {/* Paramètre */}
             <div className="flex flex-col items-center gap-2.5">
-              <div className="w-17.5 h-17.5 rounded-full border border-gray-200 bg-white flex items-center justify-center shadow-sm">
+              <div className="w-17.5 h-17.5 rounded-full border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 flex items-center justify-center shadow-sm">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="text-red-primary">
                   <circle cx="12" cy="12" r="3" />
                   <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
                 </svg>
               </div>
-              <span className="text-[13px] font-semibold text-gray-800">Paramètre</span>
+              <span className="text-[13px] font-semibold text-gray-800 dark:text-gray-200">Paramètre</span>
             </div>
 
             {/* Modifier profil */}
             <Link href="/profile/edit" className="flex flex-col items-center gap-2.5 no-underline">
-              <div className="w-17.5 h-17.5 rounded-full border border-gray-200 bg-white flex items-center justify-center shadow-sm">
+              <div className="w-17.5 h-17.5 rounded-full border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 flex items-center justify-center shadow-sm">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="text-red-primary">
                   <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
                   <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
                 </svg>
               </div>
-              <span className="text-[13px] font-semibold text-gray-800">Modifier profil</span>
+              <span className="text-[13px] font-semibold text-gray-800 dark:text-gray-200">Modifier profil</span>
             </Link>
 
             {/* Pays */}
             <div className="flex flex-col items-center gap-2.5">
-              <div className="w-17.5 h-17.5 rounded-full border border-gray-200 bg-white flex items-center justify-center shadow-sm">
+              <div className="w-17.5 h-17.5 rounded-full border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 flex items-center justify-center shadow-sm">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="text-red-primary">
                   <circle cx="12" cy="12" r="10" />
                   <line x1="2" y1="12" x2="22" y2="12" />
                   <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
                 </svg>
               </div>
-              <span className="text-[13px] font-semibold text-gray-800">{user.country || 'Pays'}</span>
+              <span className="text-[13px] font-semibold text-gray-800 dark:text-gray-200">{user.country || 'Pays'}</span>
             </div>
           </div>
         </div>
@@ -131,13 +131,13 @@ export default function Profile({ user, followedUsers, favoriteRestaurants, visi
       <div className="px-4 pt-4 flex flex-col gap-4 lg:max-w-5xl lg:mx-auto lg:px-8 lg:pt-6 lg:grid lg:grid-cols-2 lg:gap-6">
 
         {/* ── BIO ── */}
-        <section className="bg-white rounded-2xl p-5 shadow-sm lg:p-6 lg:self-start">
+        <section className="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm lg:p-6 lg:self-start">
           <SecondaryTitle children="A propos de moi :" hidden />
-          <p className="text-[14px] text-gray-700 mt-2 leading-relaxed">{user.bio || '...'}</p>
+          <p className="text-[14px] text-gray-700 dark:text-gray-300 mt-2 leading-relaxed">{user.bio || '...'}</p>
         </section>
 
         {/* ── SUIVI ── */}
-        <section className="bg-white rounded-2xl p-5 shadow-sm lg:p-6 lg:self-start">
+        <section className="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm lg:p-6 lg:self-start">
           <SecondaryTitle children="Mes abonnements :" hidden />
           {followedUsers.length === 0 ? (
             <p className="text-[13px] text-gray-400 mt-2">Vous ne suivez personne pour l'instant.</p>
@@ -156,7 +156,7 @@ export default function Profile({ user, followedUsers, favoriteRestaurants, visi
                         </span>
                       )}
                     </div>
-                    <p className="text-[11px] text-gray-700 font-medium text-center w-16 truncate">{name}</p>
+                    <p className="text-[11px] text-gray-700 dark:text-gray-300 font-medium text-center w-16 truncate">{name}</p>
                   </Link>
                 )
               })}
@@ -165,7 +165,7 @@ export default function Profile({ user, followedUsers, favoriteRestaurants, visi
         </section>
 
         {/* ── FAVORIS ── */}
-        <section className="bg-white rounded-2xl p-5 shadow-sm lg:p-6 lg:col-span-2">
+        <section className="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm lg:p-6 lg:col-span-2">
           <SecondaryTitle children="Mes favoris :" hidden />
           {favoriteRestaurants.length === 0 ? (
             <p className="text-[13px] text-gray-400 mt-2">Aucun restaurant en favori.</p>
@@ -188,7 +188,7 @@ export default function Profile({ user, followedUsers, favoriteRestaurants, visi
         </section>
 
         {/* ── DÉJÀ VISITÉS ── */}
-        <section className="bg-white rounded-2xl p-5 shadow-sm lg:p-6 lg:col-span-2">
+        <section className="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm lg:p-6 lg:col-span-2">
           <SecondaryTitle children="Déjà visités :" hidden />
           {visitedRestaurants.length === 0 ? (
             <p className="text-[13px] text-gray-400 mt-2">Aucun restaurant visité pour l'instant.</p>
@@ -198,13 +198,13 @@ export default function Profile({ user, followedUsers, favoriteRestaurants, visi
                 <Link
                   key={r.id}
                   href={`/restaurants/${r.id}`}
-                  className="flex items-center gap-3 bg-[#FAFAFA] rounded-2xl p-3 border border-gray-100 no-underline"
+                  className="flex items-center gap-3 bg-[#FAFAFA] dark:bg-gray-700 rounded-2xl p-3 border border-gray-100 dark:border-gray-600 no-underline"
                 >
                   <div className="w-14 h-14 rounded-xl overflow-hidden shrink-0">
                     <img src={r.image} alt={r.name} className="w-full h-full object-cover" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-title text-[14px] font-semibold text-gray-900 truncate">{r.name}</p>
+                    <p className="font-title text-[14px] font-semibold text-gray-900 dark:text-white truncate">{r.name}</p>
                     <p className="text-[11px] text-gray-400 truncate mt-0.5">{[r.city, r.country].filter(Boolean).join(', ')}</p>
                     {r.michelinStar && (
                       <MichelinStars count={STAR_COUNT[r.michelinStar] ?? 1} size={11} />

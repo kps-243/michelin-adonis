@@ -71,7 +71,7 @@ export default function RestaurantsIndex({ restaurants }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-white pb-24">
+    <div className="min-h-screen bg-white dark:bg-gray-900 pb-24 transition-colors">
 
       {/* Hero */}
       <div className="px-4 pt-4 lg:px-8 lg:pt-6 lg:max-w-6xl lg:mx-auto">
@@ -83,7 +83,7 @@ export default function RestaurantsIndex({ restaurants }: Props) {
         <PrimaryTitle>Restaurants</PrimaryTitle>
         <div className="mt-5">
           <SearchBar
-            placeholder="Destination ou nom de l'hôtel ..."
+            placeholder="Nom, cuisine ou ville..."
             value={query}
             onChange={handleChange}
             onSearch={handleChange}
@@ -104,7 +104,7 @@ export default function RestaurantsIndex({ restaurants }: Props) {
                   ? chip.key === 'BIB'
                     ? 'bg-green-600 text-white border-green-600'
                     : 'bg-red-primary text-white border-red-primary'
-                  : 'bg-white text-gray-600 border-gray-200',
+                  : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-700',
               ].join(' ')}
             >
               {chip.label}

@@ -54,7 +54,7 @@ export default function RestaurantSingle({ restaurant: r }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-white pb-24">
+    <div className="min-h-screen bg-white dark:bg-gray-900 pb-24 transition-colors">
 
       {/* ── HERO IMAGE ── */}
       <div className="relative h-[52vw] min-h-65 max-h-95 lg:max-h-130">
@@ -102,7 +102,7 @@ export default function RestaurantSingle({ restaurant: r }: Props) {
             onClick={handleFavorite}
             className={[
               'flex flex-col items-center gap-2 py-3 lg:py-4 rounded-2xl border transition-colors',
-              favorited ? 'border-red-200 bg-red-50 text-red-primary' : 'border-gray-100 bg-white text-gray-400',
+              favorited ? 'border-red-200 bg-red-50 text-red-primary' : 'border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-400',
             ].join(' ')}
           >
             <svg width="22" height="22" fill={favorited ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
@@ -116,7 +116,7 @@ export default function RestaurantSingle({ restaurant: r }: Props) {
             onClick={handleVisit}
             className={[
               'flex flex-col items-center gap-2 py-3 lg:py-4 rounded-2xl border transition-colors',
-              visited ? 'border-gray-200 bg-white text-gray-900' : 'border-gray-100 bg-white text-gray-400',
+              visited ? 'border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100' : 'border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-400',
             ].join(' ')}
           >
             <div className={`w-6 h-6 rounded-full flex items-center justify-center ${visited ? 'bg-red-primary' : 'bg-gray-200'}`}>
@@ -124,14 +124,14 @@ export default function RestaurantSingle({ restaurant: r }: Props) {
                 <polyline points="20 6 9 17 4 12" />
               </svg>
             </div>
-            <span className={`text-[10px] lg:text-[11px] leading-tight text-center font-medium ${visited ? 'text-gray-900' : 'text-gray-400'}`}>
+            <span className={`text-[10px] lg:text-[11px] leading-tight text-center font-medium ${visited ? 'text-gray-900 dark:text-gray-100' : 'text-gray-400'}`}>
               Déjà visité
             </span>
           </button>
 
           {/* Enregistrer */}
           <button
-            className="flex flex-col items-center gap-2 py-3 lg:py-4 rounded-2xl border border-gray-100 bg-white text-gray-400 transition-colors"
+            className="flex flex-col items-center gap-2 py-3 lg:py-4 rounded-2xl border border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-400 transition-colors"
           >
             <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
               <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
@@ -141,7 +141,7 @@ export default function RestaurantSingle({ restaurant: r }: Props) {
 
           {/* Mes notes */}
           <button
-            className="flex flex-col items-center gap-2 py-3 lg:py-4 rounded-2xl border border-gray-100 bg-white text-gray-400 transition-colors"
+            className="flex flex-col items-center gap-2 py-3 lg:py-4 rounded-2xl border border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-400 transition-colors"
           >
             <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
               <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
@@ -179,26 +179,26 @@ export default function RestaurantSingle({ restaurant: r }: Props) {
         <div className="px-5 pt-5 flex flex-col gap-5 lg:px-8 lg:pt-7 lg:gap-6">
 
           {/* Description */}
-          <p className="text-[14px] lg:text-[15px] text-gray-700 leading-relaxed">
+          <p className="text-[14px] lg:text-[15px] text-gray-700 dark:text-gray-300 leading-relaxed">
             {r.cuisine
               ? `Un restaurant spécialisé en cuisine ${primaryCuisine.toLowerCase()} proposant une expérience gastronomique unique dans un cadre soigné.`
               : 'Informations détaillées à venir.'}
           </p>
 
           {/* Equipement & services */}
-          <div className="border-t border-gray-100 pt-5 lg:grid lg:grid-cols-2 lg:gap-8">
+          <div className="border-t border-gray-100 dark:border-gray-700 pt-5 lg:grid lg:grid-cols-2 lg:gap-8">
             <div>
-              <p className="text-[14px] font-medium text-gray-800 mb-1">Equipement et services</p>
+              <p className="text-[14px] font-medium text-gray-800 dark:text-gray-200 mb-1">Equipement et services</p>
               <p className="text-[13px] text-gray-400">—</p>
             </div>
             {r.lat && r.lng && (
               <div>
-                <p className="text-[14px] font-medium text-gray-800 mb-1 mt-4 lg:mt-0">Localisation</p>
+                <p className="text-[14px] font-medium text-gray-800 dark:text-gray-200 mb-1 mt-4 lg:mt-0">Localisation</p>
                 <a
                   href={`https://maps.google.com/?q=${r.lat},${r.lng}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-[13px] text-gray-500"
+                  className="text-[13px] text-gray-500 dark:text-gray-400"
                 >
                   Voir sur Maps
                 </a>
@@ -207,10 +207,10 @@ export default function RestaurantSingle({ restaurant: r }: Props) {
           </div>
 
           {/* Localisation */}
-          <div className="border-t border-gray-100 pt-5 pb-4">
-            <p className="text-[14px] font-medium text-gray-800 mb-2">Adresse</p>
+          <div className="border-t border-gray-100 dark:border-gray-700 pt-5 pb-4">
+            <p className="text-[14px] font-medium text-gray-800 dark:text-gray-200 mb-2">Adresse</p>
             {address && (
-              <p className="text-[13px] text-gray-500 leading-relaxed">{address}</p>
+              <p className="text-[13px] text-gray-500 dark:text-gray-400 leading-relaxed">{address}</p>
             )}
             {r.lat && r.lng && (
               <a
