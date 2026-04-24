@@ -16,7 +16,7 @@
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit && tsc --noEmit --project inertia/tsconfig.json",
     "migrate": "node ace migration:fresh && node ace db:seed --files database/seeders/main_seeder.ts",
-    "docker": "npm run migrate && node ace serve --hmr"
+    "docker": "npm run build && npm run migrate && node ace serve --hmr"
   },
   "imports": {
     "#controllers/*": "./app/controllers/*.js",

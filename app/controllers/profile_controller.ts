@@ -111,6 +111,6 @@ export default class ProfileController {
     const payload = await request.validateUsing(profileValidator)
     await user.merge(payload).save()
     session.flash('success', 'Profil mis à jour avec succès')
-    return response.redirect().toRoute('profile.show')
+    return response.redirect('profile.show')
   }
 }
