@@ -27,3 +27,7 @@ yarn-error.log
 
 # Dépendances Adonis
 .adonisjs
+!.adonisjs/client/
+!.adonisjs/client/registry/
+!.adonisjs/client/registry/**
+
