@@ -44,7 +44,7 @@ export default function SearchBar({
   return (
     <form
       onSubmit={handleSubmit}
-      className={`flex items-center gap-1 bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] p-1 ${className}`.trim()}
+      className={`flex items-center gap-1 bg-white dark:bg-gray-800 rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] p-1 ${className}`.trim()}
       role="search"
     >
       <input
@@ -57,7 +57,7 @@ export default function SearchBar({
           flex-1 min-w-0
           bg-transparent
           px-3 py-2
-          text-sm text-gray-900 placeholder:text-gray-400
+          text-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-400
           focus:outline-none
         "
       />

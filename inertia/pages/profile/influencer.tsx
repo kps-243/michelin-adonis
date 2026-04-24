@@ -58,17 +58,17 @@ export default function InfluencerProfile({ user, isFollowing = false }: Props) 
   const vlogs = buildVlogs(user)
 
   return (
-    <div className="min-h-screen bg-white pb-24">
+    <div className="min-h-screen bg-white dark:bg-gray-900 pb-24 transition-colors">
 
       {/* ── DESKTOP WRAPPER ── */}
       <div className="lg:max-w-4xl lg:mx-auto">
 
         {/* Profile card */}
-        <div className="bg-white shadow-sm px-6 pt-6 pb-8 lg:rounded-2xl lg:mt-8 lg:shadow-md lg:flex lg:items-center lg:gap-8 lg:px-10 lg:py-10">
+        <div className="bg-white dark:bg-gray-800 shadow-sm px-6 pt-6 pb-8 lg:rounded-2xl lg:mt-8 lg:shadow-md lg:flex lg:items-center lg:gap-8 lg:px-10 lg:py-10">
 
           {/* Avatar */}
           <div className="flex flex-col items-center lg:items-start lg:shrink-0">
-            <div className="w-32 h-32 rounded-full overflow-hidden bg-gray-200 mb-4 shadow-md lg:w-40 lg:h-40 lg:mb-0">
+            <div className="w-32 h-32 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-600 mb-4 shadow-md lg:w-40 lg:h-40 lg:mb-0">
               {user.avatar ? (
                 <img src={user.avatar} alt={displayName} className="w-full h-full object-cover" />
               ) : (
@@ -82,7 +82,7 @@ export default function InfluencerProfile({ user, isFollowing = false }: Props) 
           {/* Name + bio + follow — stacked on mobile, side by side on desktop */}
           <div className="flex flex-col items-center lg:items-start lg:flex-1">
             <div className="flex items-center gap-2 mb-3">
-              <p className="font-title text-[20px] lg:text-[28px] font-semibold text-gray-900">{displayName}</p>
+              <p className="font-title text-[20px] lg:text-[28px] font-semibold text-gray-900 dark:text-white">{displayName}</p>
               <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center shrink-0">
                 <svg width="9" height="9" fill="none" stroke="white" strokeWidth="3" viewBox="0 0 24 24">
                   <polyline points="20 6 9 17 4 12" />
@@ -107,7 +107,7 @@ export default function InfluencerProfile({ user, isFollowing = false }: Props) 
               }}
               className={`px-8 py-2 rounded-full text-[13px] font-semibold transition-colors ${
                 following
-                  ? 'bg-gray-100 text-gray-700 border border-gray-200'
+                  ? 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-600'
                   : 'bg-red-primary text-white'
               }`}
             >
@@ -120,7 +120,7 @@ export default function InfluencerProfile({ user, isFollowing = false }: Props) 
         {!user.bio && (
           <section className="px-5 pt-6 pb-2 lg:px-0 lg:pt-6">
             <SecondaryTitle hidden>A propos de moi :</SecondaryTitle>
-            <p className="text-[14px] text-gray-700 leading-relaxed mt-2">
+            <p className="text-[14px] text-gray-700 dark:text-gray-300 leading-relaxed mt-2">
               Créateur de contenu passionné par les voyages et la gastronomie, je partage des restaurants, des lieux inspirants et des expériences authentiques.
             </p>
           </section>
@@ -128,7 +128,7 @@ export default function InfluencerProfile({ user, isFollowing = false }: Props) 
         {user.bio && (
           <section className="px-5 pt-6 pb-2 lg:hidden">
             <SecondaryTitle hidden>A propos de moi :</SecondaryTitle>
-            <p className="text-[14px] text-gray-700 leading-relaxed mt-2">{user.bio}</p>
+            <p className="text-[14px] text-gray-700 dark:text-gray-300 leading-relaxed mt-2">{user.bio}</p>
           </section>
         )}
 

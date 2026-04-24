@@ -49,7 +49,7 @@ export default function Search({ query, restaurants, users }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-white pb-24">
+    <div className="min-h-screen bg-white dark:bg-gray-900 pb-24 transition-colors">
       <div className="px-4 pt-4 pb-4 lg:px-8 lg:max-w-3xl lg:mx-auto">
         <SearchBar
           placeholder="Restaurants, influenceurs, experts..."
@@ -86,13 +86,13 @@ export default function Search({ query, restaurants, users }: Props) {
               <Link
                 key={r.id}
                 href={`/restaurants/${r.id}`}
-                className="flex items-center gap-3 bg-gray-50 rounded-2xl p-3 border border-gray-100"
+                className="flex items-center gap-3 bg-gray-50 dark:bg-gray-800 rounded-2xl p-3 border border-gray-100 dark:border-gray-700"
               >
                 <div className="w-14 h-14 rounded-xl overflow-hidden shrink-0">
                   <img src={r.image} alt={r.name} className="w-full h-full object-cover" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-title text-[14px] font-semibold text-gray-900 truncate">{r.name}</p>
+                  <p className="font-title text-[14px] font-semibold text-gray-900 dark:text-white truncate">{r.name}</p>
                   <p className="text-[11px] text-gray-400 truncate mt-0.5">
                     {[r.cuisine?.split(',')[0].trim(), r.city, r.country].filter(Boolean).join(' · ')}
                   </p>
@@ -117,20 +117,20 @@ export default function Search({ query, restaurants, users }: Props) {
                 <Link
                   key={u.id}
                   href={`/users/${u.id}`}
-                  className="flex items-center gap-3 bg-gray-50 rounded-2xl p-3 border border-gray-100"
+                  className="flex items-center gap-3 bg-gray-50 dark:bg-gray-800 rounded-2xl p-3 border border-gray-100 dark:border-gray-700"
                 >
-                  <div className={`w-12 h-12 rounded-full shrink-0 flex items-center justify-center overflow-hidden ${u.role === 'expert' ? 'bg-red-primary' : 'bg-gray-200'}`}>
+                  <div className={`w-12 h-12 rounded-full shrink-0 flex items-center justify-center overflow-hidden ${u.role === 'expert' ? 'bg-red-primary' : 'bg-gray-200 dark:bg-gray-600'}`}>
                     {u.avatar ? (
                       <img src={u.avatar} alt={displayName} className="w-full h-full object-cover" />
                     ) : (
-                      <span className={`text-[15px] font-semibold ${u.role === 'expert' ? 'text-white' : 'text-gray-600'}`}>
+                      <span className={`text-[15px] font-semibold ${u.role === 'expert' ? 'text-white' : 'text-gray-600 dark:text-gray-300'}`}>
                         {u.initials}
                       </span>
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5">
-                      <p className="font-title text-[14px] font-semibold text-gray-900 truncate">{displayName}</p>
+                      <p className="font-title text-[14px] font-semibold text-gray-900 dark:text-white truncate">{displayName}</p>
                       <VerifiedBadge />
                     </div>
                     <p className="text-[11px] text-gray-400 mt-0.5 truncate">

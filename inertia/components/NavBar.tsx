@@ -53,7 +53,7 @@ export default function NavBar() {
   ]
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 h-17 bg-(--navbar-bg) flex items-center justify-around px-4 z-50">
+    <nav className="fixed bottom-0 left-0 right-0 h-17 bg-(--navbar-bg) flex items-center justify-around px-4 z-50 border-t border-gray-200/50 dark:border-white/10">
       {navItems.map((item) => {
         const isActive = url === item.href || (item.href !== '/' && url.startsWith(item.href))
         return (
@@ -64,7 +64,7 @@ export default function NavBar() {
             <img
               src={isActive ? item.icon : item.outlineIcon}
               alt={item.label}
-              className="w-10 h-7 object-contain"
+              className={`w-10 h-7 object-contain${isActive ? '' : ' nav-icon-inactive'}`}
             />
           </Link>
         )

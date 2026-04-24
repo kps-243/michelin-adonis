@@ -62,14 +62,14 @@ export default function AdminRestaurantEdit({ restaurant }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-[#EFEFEF] pb-24">
+    <div className="min-h-screen bg-[#EFEFEF] dark:bg-gray-900 pb-24 transition-colors">
 
       {/* Header */}
-      <div className="bg-white shadow-sm sticky top-0 z-40">
+      <div className="bg-white dark:bg-gray-900 shadow-sm sticky top-0 z-40 border-b border-transparent dark:border-gray-700">
         <div className="px-4 py-3 flex items-center gap-3 lg:max-w-5xl lg:mx-auto lg:px-8 lg:py-4">
           <Link
             href={isEdit ? `/admin/restaurants/${restaurant.id}` : '/admin/restaurants'}
-            className="w-9 h-9 flex items-center justify-center rounded-full border border-gray-200 text-gray-500 hover:border-red-primary hover:text-red-primary transition-colors shrink-0"
+            className="w-9 h-9 flex items-center justify-center rounded-full border border-gray-200 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:border-red-primary hover:text-red-primary transition-colors shrink-0"
           >
             <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
               <polyline points="15 18 9 12 15 6" />
@@ -241,10 +241,10 @@ export default function AdminRestaurantEdit({ restaurant }: Props) {
 
 function inputCls(hasError: boolean) {
   return [
-    'w-full px-4 py-3 rounded-xl bg-white border-[1.5px] text-[13px] text-gray-900 outline-none transition-colors focus:ring-0',
+    'w-full px-4 py-3 rounded-xl bg-white dark:bg-gray-800 border-[1.5px] text-[13px] text-gray-900 dark:text-gray-100 outline-none transition-colors focus:ring-0',
     hasError
       ? 'border-red-primary focus:border-red-primary'
-      : 'border-gray-200 focus:border-gray-700',
+      : 'border-gray-200 dark:border-gray-600 focus:border-gray-700 dark:focus:border-gray-400',
   ].join(' ')
 }
 
@@ -259,7 +259,7 @@ function Field({
 }) {
   return (
     <div>
-      <label className="block text-[10px] uppercase tracking-[0.12em] text-gray-500 mb-1.5 font-semibold">
+      <label className="block text-[10px] uppercase tracking-[0.12em] text-gray-500 dark:text-gray-400 mb-1.5 font-semibold">
         {label}
       </label>
       {children}
